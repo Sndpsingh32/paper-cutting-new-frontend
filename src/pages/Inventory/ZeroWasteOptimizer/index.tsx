@@ -413,16 +413,103 @@ export default function ZeroWasteOptimizer() {
         toast.info("Original layout restored!");
     };
 
+    const validOrderCount = orders.filter(o => o.gsm && o.reelSize && o.cutSize).length;
+    const totalOrderedSheets = orders.reduce((sum, o) => sum + (Number(o.qty) || 0), 0);
+    const matchedGroups = groupResults.filter(g => !g.noReelsFound && g.rollOptions.some(r => !r.cannotFit)).length;
+    const selectedRollCount = groupResults.reduce((count, g) => {
+        const selIdx = selectedRollIndices[g.group.key] || 0;
+        const opt = g.rollOptions?.[selIdx];
+        return count + (opt && !opt.cannotFit ? 1 : 0);
+    }, 0);
+
     return (
         <ReadPermissionGuard resource={Resource.REEL}>
-        <div className="px-0 py-4 w-full max-w-none">
+        <div className="relative w-full max-w-none space-y-6 pb-8">
             <PageMeta title="Zero Waste Optimizer | JAIN TRADE LINKS" description="Plan and optimize paper roll cutting to minimize waste." />
 
-            <div className="flex items-center gap-4 mb-8">
-                <button onClick={() => navigate(-1)} className="flex items-center justify-center w-11 h-11 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl hover:bg-gray-50 transition-all shadow-sm active:scale-95">
-                    <AngleLeftIcon className="w-5 h-5 text-gray-500" />
-                </button>
-                <h1 className="text-2xl font-black text-gray-800 dark:text-white">Zero Waste Optimizer</h1>
+            <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-72 overflow-hidden">
+                <div className="absolute -left-20 -top-24 h-64 w-64 rounded-full bg-brand-200/30 blur-3xl dark:bg-brand-900/20" />
+                <div className="absolute right-0 top-0 h-72 w-72 rounded-full bg-indigo-200/30 blur-3xl dark:bg-indigo-900/20" />
+                <div className="absolute left-1/3 top-24 h-40 w-40 rounded-full bg-emerald-200/30 blur-3xl dark:bg-emerald-900/10" />
+            </div>
+
+            <div className="overflow-hidden rounded-[2rem] border border-gray-200/80 bg-white/90 shadow-theme-sm backdrop-blur-sm dark:border-gray-800 dark:bg-gray-900/90">
+                <div className="border-b border-gray-100 bg-linear-to-r from-gray-950 via-gray-900 to-brand-950 px-6 py-7 dark:border-gray-800 sm:px-8">
+                    <div className="flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
+                        <div className="max-w-3xl">
+                            <button
+                                onClick={() => navigate(-1)}
+                                className="mb-5 inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-bold uppercase tracking-[0.18em] text-gray-300 transition hover:bg-white/10 hover:text-white"
+                            >
+                                <AngleLeftIcon className="h-4 w-4" />
+                                Back
+                            </button>
+                            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-brand-400/30 bg-brand-500/10 px-3 py-1 text-[11px] font-black uppercase tracking-[0.22em] text-brand-200">
+                                <span className="h-2 w-2 rounded-full bg-brand-400" />
+                                Inventory Intelligence
+                            </div>
+                            <h1 className="text-3xl font-black tracking-tight text-white sm:text-4xl">
+                                Zero Waste Optimizer
+                            </h1>
+                            <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-300 sm:text-base">
+                                Plan roll cutting with a clear, production-ready view. Compare roll options, control strip output, and share customer-ready summaries from one workspace.
+                            </p>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 xl:w-[520px]">
+                            <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-sm">
+                                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-gray-400">Orders</p>
+                                <p className="mt-2 text-2xl font-black text-white">{validOrderCount}</p>
+                                <p className="text-xs font-medium text-gray-400">Ready to optimize</p>
+                            </div>
+                            <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-sm">
+                                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-gray-400">Sheets</p>
+                                <p className="mt-2 text-2xl font-black text-white">{totalOrderedSheets.toLocaleString()}</p>
+                                <p className="text-xs font-medium text-gray-400">Total requirement</p>
+                            </div>
+                            <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-sm">
+                                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-gray-400">Groups</p>
+                                <p className="mt-2 text-2xl font-black text-white">{matchedGroups}</p>
+                                <p className="text-xs font-medium text-gray-400">Matched layouts</p>
+                            </div>
+                            <div className="rounded-2xl border border-emerald-400/20 bg-emerald-500/10 px-4 py-3 backdrop-blur-sm">
+                                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-emerald-200">Selected</p>
+                                <p className="mt-2 text-2xl font-black text-white">{selectedRollCount}</p>
+                                <p className="text-xs font-medium text-emerald-100/80">Roll plans</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="grid gap-3 px-6 py-4 sm:grid-cols-3 sm:px-8">
+                    <div className="flex items-center gap-3 rounded-2xl bg-gray-50 px-4 py-3 dark:bg-gray-800/60">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-100 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300">
+                            <span className="text-sm font-black">1</span>
+                        </div>
+                        <div>
+                            <p className="text-sm font-bold text-gray-800 dark:text-white">Enter orders</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">Client, size, GSM, quantity</p>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-3 rounded-2xl bg-gray-50 px-4 py-3 dark:bg-gray-800/60">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-100 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300">
+                            <span className="text-sm font-black">2</span>
+                        </div>
+                        <div>
+                            <p className="text-sm font-bold text-gray-800 dark:text-white">Optimize rolls</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">Find best-fit production plan</p>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-3 rounded-2xl bg-gray-50 px-4 py-3 dark:bg-gray-800/60">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300">
+                            <span className="text-sm font-black">3</span>
+                        </div>
+                        <div>
+                            <p className="text-sm font-bold text-gray-800 dark:text-white">Share & produce</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">PDF, WhatsApp, sales flow</p>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <OrderInputTable
@@ -432,32 +519,45 @@ export default function ZeroWasteOptimizer() {
             />
 
             {hasFetched && Object.keys(individualBestPlans).length > 0 && (
-                <>
+                <div className="space-y-6">
                     <IndividualBestPlans orders={orders} individualBestPlans={individualBestPlans} groupResults={groupResults} selectedRollIndices={selectedRollIndices} setSelectedRollIndices={setSelectedRollIndices} customerPhone={customerPhone} />
-                    <FinalRollSummary 
-                        groupResults={groupResults} 
+                    <FinalRollSummary
+                        groupResults={groupResults}
                         selectedRollIndices={selectedRollIndices}
                         stripModes={stripModes}
                         manualSheets={manualSheets}
                         skippedStrips={skippedStrips}
                     />
-                </>
+                </div>
             )}
 
             {hasFetched && groupResults.length === 0 && (
-                <div className="text-center py-16 bg-white dark:bg-gray-900 rounded-3xl border border-gray-100 p-6">
-                    <XCircle className="w-14 h-14 text-gray-200 mx-auto mb-4" />
-                    <p className="text-gray-700 font-black text-lg">Koi rolls nahi mile.</p>
+                <div className="rounded-[2rem] border border-dashed border-gray-300 bg-white px-6 py-16 text-center shadow-theme-xs dark:border-gray-700 dark:bg-gray-900">
+                    <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gray-100 text-gray-400 dark:bg-gray-800">
+                        <XCircle className="h-8 w-8" />
+                    </div>
+                    <p className="text-xl font-black text-gray-800 dark:text-white">No matching rolls found</p>
+                    <p className="mx-auto mt-2 max-w-xl text-sm text-gray-500 dark:text-gray-400">
+                        Check GSM, quality, and size inputs, or verify roll inventory availability for these requirements.
+                    </p>
                 </div>
             )}
 
             {hasFetched && groupResults.length > 0 && (
-                <div className="space-y-10">
-                    <div className="flex items-center gap-3">
-                        <ChevronRight className="w-5 h-5 text-green-500" />
-                        <h2 className="text-sm font-black text-gray-700 dark:text-gray-300 uppercase tracking-widest text-center">
-                            Results Summary
-                        </h2>
+                <div className="space-y-6">
+                    <div className="flex flex-col gap-3 rounded-[1.75rem] border border-gray-200 bg-white px-6 py-5 shadow-theme-xs dark:border-gray-800 dark:bg-gray-900 sm:flex-row sm:items-center sm:justify-between">
+                        <div>
+                            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-black uppercase tracking-[0.18em] text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300">
+                                <ChevronRight className="h-3.5 w-3.5" />
+                                Optimization Results
+                            </div>
+                            <h2 className="mt-3 text-xl font-black text-gray-900 dark:text-white">Production-ready roll plans</h2>
+                            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Review each group, adjust strip behavior, and share the final plan with confidence.</p>
+                        </div>
+                        <div className="rounded-2xl bg-gray-50 px-4 py-3 text-sm dark:bg-gray-800/70">
+                            <span className="font-black text-gray-900 dark:text-white">{groupResults.length}</span>
+                            <span className="ml-1 text-gray-500 dark:text-gray-400">result group{groupResults.length > 1 ? "s" : ""}</span>
+                        </div>
                     </div>
 
                     {groupResults.map((gRes, gIdx) => (

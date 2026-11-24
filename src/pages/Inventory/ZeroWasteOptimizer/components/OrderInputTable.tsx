@@ -34,62 +34,91 @@ const OrderInputTable: React.FC<Props> = ({
     orders, addOrder, removeOrder, updateOrder, setOrders,
     fetchReels, isLoading, hasFetched, setHasFetched
 }) => {
+    const filledOrders = orders.filter(o => o.gsm && o.reelSize && o.cutSize && o.qty).length;
+    const totalQty = orders.reduce((sum, o) => sum + (Number(o.qty) || 0), 0);
+    const totalWeight = orders.reduce((sum, o) => sum + (Number(o.weightKg) || 0), 0);
+
     return (
-        <div className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-[2.5rem] overflow-hidden shadow-xl mb-6">
-            <div className="bg-linear-to-r from-indigo-600 to-violet-600 p-6 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl bg-white/20 flex items-center justify-center">
-                        <Scissors className="w-5 h-5 text-white" />
+        <div className="overflow-hidden rounded-[2rem] border border-gray-200 bg-white shadow-theme-sm dark:border-gray-800 dark:bg-gray-900">
+            <div className="border-b border-gray-100 bg-linear-to-r from-white via-gray-50 to-brand-50/50 px-6 py-6 dark:border-gray-800 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 sm:px-8">
+                <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
+                    <div className="flex items-start gap-4">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-600 text-white shadow-lg shadow-brand-500/20">
+                            <Scissors className="h-5 w-5" />
+                        </div>
+                        <div>
+                            <div className="inline-flex items-center rounded-full bg-brand-50 px-3 py-1 text-[11px] font-black uppercase tracking-[0.18em] text-brand-700 dark:bg-brand-500/10 dark:text-brand-300">
+                                Order Workspace
+                            </div>
+                            <h3 className="mt-3 text-xl font-black text-gray-900 dark:text-white sm:text-2xl">Customer Requirements</h3>
+                            <p className="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-400">
+                                Add customer orders, validate sizes, and run optimization. The layout stays clean for operators while keeping all existing calculations intact.
+                            </p>
+                        </div>
                     </div>
-                    <div>
-                        <h3 className="text-lg font-black text-white">Order Requirements</h3>
-                        <p className="text-xs text-indigo-200 font-bold uppercase tracking-widest">Enter multiple client orders at once</p>
+
+                    <div className="flex flex-wrap items-center gap-3">
+                        <div className="grid grid-cols-3 gap-2 rounded-2xl border border-gray-200 bg-white/80 p-2 dark:border-gray-700 dark:bg-gray-800/70">
+                            <div className="rounded-xl px-3 py-2 text-center">
+                                <p className="text-[10px] font-black uppercase tracking-[0.16em] text-gray-400">Ready</p>
+                                <p className="text-lg font-black text-gray-900 dark:text-white">{filledOrders}</p>
+                            </div>
+                            <div className="rounded-xl px-3 py-2 text-center">
+                                <p className="text-[10px] font-black uppercase tracking-[0.16em] text-gray-400">Sheets</p>
+                                <p className="text-lg font-black text-gray-900 dark:text-white">{totalQty.toLocaleString()}</p>
+                            </div>
+                            <div className="rounded-xl px-3 py-2 text-center">
+                                <p className="text-[10px] font-black uppercase tracking-[0.16em] text-gray-400">Weight</p>
+                                <p className="text-lg font-black text-gray-900 dark:text-white">{totalWeight.toFixed(1)}kg</p>
+                            </div>
+                        </div>
+                        <button
+                            onClick={addOrder}
+                            className="inline-flex items-center gap-2 rounded-xl bg-gray-900 px-4 py-3 text-xs font-black uppercase tracking-[0.16em] text-white transition hover:bg-black dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100"
+                        >
+                            <span className="text-base leading-none">+</span>
+                            Add Order
+                        </button>
                     </div>
                 </div>
-                <button
-                    onClick={addOrder}
-                    className="px-4 py-2 bg-white text-indigo-600 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-indigo-50 transition-all shadow-lg"
-                >
-                    + Add Order
-                </button>
             </div>
 
             <div className="overflow-x-auto">
-                <table className="w-full min-w-[1100px] text-left">
+                <table className="w-full min-w-[1180px] text-left">
                     <thead>
-                        <tr className="bg-gray-50 dark:bg-gray-800/60">
-                            <th className="px-4 py-4 text-[10px] font-black uppercase text-gray-400 tracking-widest">#</th>
-                            <th className="px-4 py-4 text-[10px] font-black uppercase text-gray-400 tracking-widest">Client / Party</th>
-                            <th className="px-4 py-4 text-[10px] font-black uppercase text-gray-400 tracking-widest">Quality</th>
-                            <th className="px-4 py-4 text-[10px] font-black uppercase text-gray-400 tracking-widest">GSM</th>
-                            <th className="px-4 py-4 text-[10px] font-black uppercase text-indigo-400 tracking-widest">Reel Size</th>
-                            <th className="px-4 py-4 text-[10px] font-black uppercase text-violet-400 tracking-widest">Cutting Size</th>
-                            <th className="px-4 py-4 text-[10px] font-black uppercase text-amber-500 tracking-widest">Grain</th>
-                            <th className="px-4 py-4 text-[10px] font-black uppercase text-gray-400 tracking-widest text-center">Packets × Sht</th>
-                            <th className="px-4 py-4 text-[10px] font-black uppercase text-gray-400 tracking-widest text-right">Total Qty</th>
-                            <th className="px-4 py-4 text-[10px] font-black uppercase text-emerald-400 tracking-widest text-right">Weight (kg)</th>
-                            <th className="px-4 py-4"></th>
+                        <tr className="border-b border-gray-100 bg-gray-50/80 dark:border-gray-800 dark:bg-gray-800/50">
+                            <th className="px-4 py-4 text-[11px] font-black uppercase tracking-[0.16em] text-gray-400">#</th>
+                            <th className="px-4 py-4 text-[11px] font-black uppercase tracking-[0.16em] text-gray-400">Client / Party</th>
+                            <th className="px-4 py-4 text-[11px] font-black uppercase tracking-[0.16em] text-gray-400">Quality</th>
+                            <th className="px-4 py-4 text-[11px] font-black uppercase tracking-[0.16em] text-gray-400">GSM</th>
+                            <th className="px-4 py-4 text-[11px] font-black uppercase tracking-[0.16em] text-brand-600 dark:text-brand-300">Reel Size</th>
+                            <th className="px-4 py-4 text-[11px] font-black uppercase tracking-[0.16em] text-indigo-600 dark:text-indigo-300">Cutting Size</th>
+                            <th className="px-4 py-4 text-[11px] font-black uppercase tracking-[0.16em] text-amber-600 dark:text-amber-300">Grain</th>
+                            <th className="px-4 py-4 text-center text-[11px] font-black uppercase tracking-[0.16em] text-gray-400">Packets × Sheets</th>
+                            <th className="px-4 py-4 text-right text-[11px] font-black uppercase tracking-[0.16em] text-gray-400">Total Qty</th>
+                            <th className="px-4 py-4 text-right text-[11px] font-black uppercase tracking-[0.16em] text-emerald-600 dark:text-emerald-300">Weight (kg)</th>
+                            <th className="px-4 py-4 text-right text-[11px] font-black uppercase tracking-[0.16em] text-gray-400">Action</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-50 dark:divide-gray-800">
+                    <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
                         {orders.map((o, idx) => (
-                            <tr key={o.id} className="hover:bg-gray-50/50 dark:hover:bg-gray-800/30 transition-colors">
-                                <td className="px-4 py-3">
-                                    <span className="w-7 h-7 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 text-xs font-black flex items-center justify-center">
+                            <tr key={o.id} className="group transition-colors hover:bg-gray-50/80 dark:hover:bg-gray-800/30">
+                                <td className="px-4 py-4">
+                                    <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-gray-100 text-xs font-black text-gray-600 dark:bg-gray-800 dark:text-gray-300">
                                         {idx + 1}
                                     </span>
                                 </td>
-                                <td className="px-4 py-3">
+                                <td className="px-4 py-4">
                                     <input
-                                        placeholder="Client Name"
-                                        className="w-28 bg-transparent font-bold text-sm outline-none border-b border-transparent focus:border-indigo-400 text-gray-800 dark:text-white placeholder-gray-300 transition-colors"
+                                        placeholder="Client name"
+                                        className="w-32 rounded-lg border border-transparent bg-transparent px-2 py-1.5 text-sm font-semibold text-gray-800 outline-none transition placeholder:text-gray-300 focus:border-brand-200 focus:bg-brand-50/40 dark:text-white dark:placeholder:text-gray-600 dark:focus:border-brand-500/30 dark:focus:bg-brand-500/5"
                                         value={o.client}
                                         onChange={e => updateOrder(o.id, "client", e.target.value)}
                                     />
                                 </td>
-                                <td className="px-4 py-3">
+                                <td className="px-4 py-4">
                                     <select
-                                        className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-2 h-9 text-xs font-black text-gray-800 dark:text-white outline-none focus:border-indigo-400"
+                                        className="h-10 rounded-xl border border-gray-200 bg-white px-3 text-xs font-bold text-gray-700 outline-none transition focus:border-brand-400 focus:ring-4 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
                                         value={o.quality}
                                         onChange={e => updateOrder(o.id, "quality", e.target.value)}
                                     >
@@ -97,11 +126,11 @@ const OrderInputTable: React.FC<Props> = ({
                                         {Object.values(PaperQuality).map(q => <option key={q} value={q}>{q}</option>)}
                                     </select>
                                 </td>
-                                <td className="px-4 py-3">
+                                <td className="px-4 py-4">
                                     <input
                                         type="number"
                                         placeholder="GSM"
-                                        className="w-16 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg h-9 px-2 text-xs font-black outline-none focus:border-indigo-400 text-center"
+                                        className="h-10 w-20 rounded-xl border border-gray-200 bg-white px-2 text-center text-xs font-bold text-gray-800 outline-none transition focus:border-brand-400 focus:ring-4 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
                                         value={o.gsm}
                                         onChange={e => {
                                             const val = e.target.value;
@@ -115,12 +144,12 @@ const OrderInputTable: React.FC<Props> = ({
                                         }}
                                     />
                                 </td>
-                                <td className="px-4 py-3">
-                                    <div className="flex items-center gap-1">
+                                <td className="px-4 py-4">
+                                    <div className="flex items-center overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
                                         <input
                                             type="number"
                                             placeholder="26"
-                                            className="w-20 bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-700/50 rounded-l-lg h-9 px-2 text-sm font-black outline-none focus:border-indigo-500 text-indigo-700 dark:text-indigo-300 text-center"
+                                            className="h-10 w-20 bg-transparent px-2 text-center text-sm font-bold text-gray-800 outline-none dark:text-white"
                                             value={o.reelSize}
                                             onChange={e => {
                                                 const val = e.target.value;
@@ -134,12 +163,12 @@ const OrderInputTable: React.FC<Props> = ({
                                             }}
                                         />
                                         <select
-                                            className="bg-indigo-100 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-700/50 rounded-r-lg h-9 px-1 text-[10px] font-black text-indigo-600 outline-none cursor-pointer"
+                                            className="h-10 border-l border-gray-200 bg-gray-50 px-2 text-[10px] font-black uppercase text-gray-500 outline-none dark:border-gray-700 dark:bg-gray-700/60 dark:text-gray-300"
                                             value={o.reelSizeUnit}
                                             onChange={e => {
                                                 const unit = e.target.value as SizeUnit;
                                                 const w = toMm(Number(o.reelSize) || 0, unit);
-                                                const h = toMm(Number(o.cutSize) || 0, unit); // Syncing with new unit
+                                                const h = toMm(Number(o.cutSize) || 0, unit);
                                                 const total = Number(o.qty) || 0;
                                                 const g = Number(o.gsm) || 0;
                                                 const localWeight = (w > 0 && h > 0 && g > 0 && total > 0) ? calcTotalWeightKg(w, h, g, total).toFixed(2) : "";
@@ -151,12 +180,12 @@ const OrderInputTable: React.FC<Props> = ({
                                         </select>
                                     </div>
                                 </td>
-                                <td className="px-4 py-3">
-                                    <div className="flex items-center gap-1">
+                                <td className="px-4 py-4">
+                                    <div className="flex items-center overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
                                         <input
                                             type="number"
                                             placeholder="17.5"
-                                            className="w-20 bg-violet-50 dark:bg-violet-900/20 border border-violet-200 dark:border-violet-700/50 rounded-l-lg h-9 px-2 text-sm font-black outline-none focus:border-violet-500 text-violet-700 dark:text-violet-300 text-center"
+                                            className="h-10 w-20 bg-transparent px-2 text-center text-sm font-bold text-gray-800 outline-none dark:text-white"
                                             value={o.cutSize}
                                             onChange={e => {
                                                 const val = e.target.value;
@@ -170,7 +199,7 @@ const OrderInputTable: React.FC<Props> = ({
                                             }}
                                         />
                                         <select
-                                            className="bg-violet-100 dark:bg-violet-900/30 border border-violet-200 dark:border-violet-700/50 rounded-r-lg h-9 px-1 text-[10px] font-black text-violet-600 outline-none cursor-pointer"
+                                            className="h-10 border-l border-gray-200 bg-gray-50 px-2 text-[10px] font-black uppercase text-gray-500 outline-none dark:border-gray-700 dark:bg-gray-700/60 dark:text-gray-300"
                                             value={o.cutSizeUnit}
                                             onChange={e => {
                                                 const unit = e.target.value as SizeUnit;
@@ -187,9 +216,9 @@ const OrderInputTable: React.FC<Props> = ({
                                         </select>
                                     </div>
                                 </td>
-                                <td className="px-4 py-3">
+                                <td className="px-4 py-4">
                                     <select
-                                        className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/50 rounded-lg h-9 px-2 text-[10px] font-black text-amber-700 dark:text-amber-300 outline-none focus:border-amber-500 transition-colors"
+                                        className="h-10 rounded-xl border border-gray-200 bg-white px-3 text-xs font-bold text-gray-700 outline-none transition focus:border-brand-400 focus:ring-4 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
                                         value={o.grain || "Any"}
                                         onChange={e => updateOrder(o.id, "grain", e.target.value as any)}
                                     >
@@ -198,17 +227,16 @@ const OrderInputTable: React.FC<Props> = ({
                                         <option value="Short">Grain Short</option>
                                     </select>
                                 </td>
-                                <td className="px-4 py-3">
-                                    <div className="flex items-center gap-1 justify-center">
+                                <td className="px-4 py-4">
+                                    <div className="flex items-center justify-center gap-2">
                                         <input
                                             type="number"
                                             placeholder="Pkts"
-                                            className="w-14 bg-gray-100 dark:bg-gray-800 rounded-lg h-8 px-1 text-xs font-bold outline-none text-center"
+                                            className="h-10 w-16 rounded-xl border border-gray-200 bg-white px-2 text-center text-xs font-bold text-gray-700 outline-none transition focus:border-brand-400 focus:ring-4 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
                                             value={o.packets}
                                             onChange={e => {
                                                 const pkts = e.target.value;
                                                 const total = (Number(pkts) || 0) * (Number(o.sheetsPerPacket) || 100);
-                                                // Auto-calculate weight when packets change
                                                 const widthMm = toMm(Number(o.reelSize) || 0, o.reelSizeUnit);
                                                 const heightMm = toMm(Number(o.cutSize) || 0, o.cutSizeUnit);
                                                 const gsm = Number(o.gsm) || 0;
@@ -218,14 +246,13 @@ const OrderInputTable: React.FC<Props> = ({
                                                 if (hasFetched) setHasFetched(false);
                                             }}
                                         />
-                                        <span className="text-[10px] font-black text-gray-300">×</span>
+                                        <span className="text-xs font-bold text-gray-300">×</span>
                                         <select
-                                            className="text-[10px] font-black text-gray-500 bg-transparent outline-none"
+                                            className="h-10 rounded-xl border border-gray-200 bg-white px-2 text-xs font-bold text-gray-600 outline-none transition focus:border-brand-400 focus:ring-4 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
                                             value={o.sheetsPerPacket}
                                             onChange={e => {
                                                 const spp = e.target.value;
                                                 const total = (Number(o.packets) || 0) * (Number(spp) || 100);
-                                                // Auto-calculate weight when sheets per packet changes
                                                 const widthMm = toMm(Number(o.reelSize) || 0, o.reelSizeUnit);
                                                 const heightMm = toMm(Number(o.cutSize) || 0, o.cutSizeUnit);
                                                 const gsm = Number(o.gsm) || 0;
@@ -242,17 +269,16 @@ const OrderInputTable: React.FC<Props> = ({
                                         </select>
                                     </div>
                                 </td>
-                                <td className="px-4 py-3">
+                                <td className="px-4 py-4">
                                     <input
                                         type="number"
                                         placeholder="2100"
-                                        className="w-20 bg-transparent font-black text-sm outline-none text-right text-brand-600 dark:text-brand-400 border-b border-transparent focus:border-indigo-400"
+                                        className="h-10 w-24 rounded-xl border border-gray-200 bg-white px-3 text-right text-sm font-black text-gray-800 outline-none transition focus:border-brand-400 focus:ring-4 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
                                         value={o.qty}
                                         onChange={e => {
                                             const qty = e.target.value;
                                             const spp = Number(o.sheetsPerPacket) || 100;
                                             const pkts = qty ? (Math.round((Number(qty) / spp) * 10) / 10).toString() : "";
-                                            // Auto-calculate weight when sheets change
                                             const widthMm = toMm(Number(o.reelSize) || 0, o.reelSizeUnit);
                                             const heightMm = toMm(Number(o.cutSize) || 0, o.cutSizeUnit);
                                             const gsm = Number(o.gsm) || 0;
@@ -264,39 +290,41 @@ const OrderInputTable: React.FC<Props> = ({
                                         }}
                                     />
                                 </td>
-                                <td className="px-4 py-3">
-                                    <div className="flex items-center gap-1 justify-end">
-                                        <Weight className="w-3.5 h-3.5 text-emerald-500" />
-                                        <input
-                                            type="number"
-                                            placeholder="0.00"
-                                            step="0.01"
-                                            className="w-20 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-700/50 rounded-lg h-9 px-2 text-xs font-black outline-none focus:border-emerald-500 text-emerald-700 dark:text-emerald-300 text-right"
-                                            value={o.weightKg || ""}
-                                            onChange={e => {
-                                                const weight = e.target.value;
-                                                // Auto-calculate sheets when weight changes
-                                                const widthMm = toMm(Number(o.reelSize) || 0, o.reelSizeUnit);
-                                                const heightMm = toMm(Number(o.cutSize) || 0, o.cutSizeUnit);
-                                                const gsm = Number(o.gsm) || 0;
-                                                const weightKg = Number(weight) || 0;
-                                                const localSheets = (widthMm > 0 && heightMm > 0 && gsm > 0 && weightKg > 0) ? calcSheetsFromWeight(widthMm, heightMm, gsm, weightKg) : 0;
-                                                const spp = Number(o.sheetsPerPacket) || 100;
-                                                const pkts = localSheets > 0 ? (Math.round((localSheets / spp) * 10) / 10).toString() : "";
-                                                setOrders(prev => prev.map(r => r.id === o.id ? { ...r, weightKg: weight, qty: localSheets > 0 ? String(localSheets) : "", packets: pkts } : r));
-                                                if (widthMm > 0 && heightMm > 0 && gsm > 0 && weightKg > 0) { void backendSheetsFromWeight(widthMm,heightMm,gsm,weightKg).then(bs => { const bp = bs > 0 ? (Math.round((bs / Number(o.sheetsPerPacket || 100)) * 10) / 10).toString() : ""; setOrders(prev => prev.map(r => r.id === o.id ? { ...r, qty: bs > 0 ? String(bs) : "", packets: bp } : r)); }); }
-                                                if (hasFetched) setHasFetched(false);
-                                            }}
-                                        />
+                                <td className="px-4 py-4">
+                                    <div className="flex items-center justify-end gap-2">
+                                        <div className="flex h-10 items-center overflow-hidden rounded-xl border border-emerald-200 bg-emerald-50/50 dark:border-emerald-500/20 dark:bg-emerald-500/5">
+                                            <span className="pl-2 text-emerald-500"><Weight className="h-3.5 w-3.5" /></span>
+                                            <input
+                                                type="number"
+                                                placeholder="0.00"
+                                                step="0.01"
+                                                className="w-20 bg-transparent px-2 text-right text-xs font-black text-emerald-700 outline-none dark:text-emerald-300"
+                                                value={o.weightKg || ""}
+                                                onChange={e => {
+                                                    const weight = e.target.value;
+                                                    const widthMm = toMm(Number(o.reelSize) || 0, o.reelSizeUnit);
+                                                    const heightMm = toMm(Number(o.cutSize) || 0, o.cutSizeUnit);
+                                                    const gsm = Number(o.gsm) || 0;
+                                                    const weightKg = Number(weight) || 0;
+                                                    const localSheets = (widthMm > 0 && heightMm > 0 && gsm > 0 && weightKg > 0) ? calcSheetsFromWeight(widthMm, heightMm, gsm, weightKg) : 0;
+                                                    const spp = Number(o.sheetsPerPacket) || 100;
+                                                    const pkts = localSheets > 0 ? (Math.round((localSheets / spp) * 10) / 10).toString() : "";
+                                                    setOrders(prev => prev.map(r => r.id === o.id ? { ...r, weightKg: weight, qty: localSheets > 0 ? String(localSheets) : "", packets: pkts } : r));
+                                                    if (widthMm > 0 && heightMm > 0 && gsm > 0 && weightKg > 0) { void backendSheetsFromWeight(widthMm,heightMm,gsm,weightKg).then(bs => { const bp = bs > 0 ? (Math.round((bs / Number(o.sheetsPerPacket || 100)) * 10) / 10).toString() : ""; setOrders(prev => prev.map(r => r.id === o.id ? { ...r, qty: bs > 0 ? String(bs) : "", packets: bp } : r)); }); }
+                                                    if (hasFetched) setHasFetched(false);
+                                                }}
+                                            />
+                                        </div>
                                     </div>
                                 </td>
-                                <td className="px-4 py-3 text-right">
+                                <td className="px-4 py-4 text-right">
                                     <button
                                         onClick={() => removeOrder(o.id)}
                                         disabled={orders.length === 1}
-                                        className="p-1.5 text-gray-300 hover:text-red-500 disabled:opacity-20 transition-colors"
+                                        className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-gray-200 text-gray-400 transition hover:border-red-200 hover:bg-red-50 hover:text-red-500 disabled:cursor-not-allowed disabled:opacity-30 dark:border-gray-700 dark:hover:border-red-500/30 dark:hover:bg-red-500/10"
+                                        title="Remove order"
                                     >
-                                        <Trash2 className="w-4 h-4" />
+                                        <Trash2 className="h-4 w-4" />
                                     </button>
                                 </td>
                             </tr>
@@ -305,17 +333,20 @@ const OrderInputTable: React.FC<Props> = ({
                 </table>
             </div>
 
-            <div className="p-6 border-t border-gray-100 dark:border-gray-800 flex flex-wrap items-center gap-4">
+            <div className="flex flex-col gap-4 border-t border-gray-100 px-6 py-5 dark:border-gray-800 sm:px-8 lg:flex-row lg:items-center lg:justify-between">
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                    <span className="font-semibold text-gray-700 dark:text-gray-200">Tip:</span> Fill GSM, Reel Size, Cutting Size, and Quantity for accurate optimization.
+                </div>
 
                 <button
                     onClick={fetchReels}
                     disabled={isLoading}
-                    className="flex items-center gap-2 px-8 py-3 bg-linear-to-r from-green-500 to-emerald-600 text-white rounded-2xl font-black uppercase text-xs tracking-widest hover:from-green-600 hover:to-emerald-700 transition-all shadow-xl shadow-green-500/30 active:scale-95 disabled:opacity-60"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-6 py-3 text-xs font-black uppercase tracking-[0.16em] text-white shadow-lg shadow-brand-500/25 transition hover:bg-brand-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
                 >
                     {isLoading ? (
-                        <><RefreshCw className="w-4 h-4 animate-spin" /> Calculating...</>
+                        <><RefreshCw className="h-4 w-4 animate-spin" /> Optimizing...</>
                     ) : (
-                        <><Zap className="w-4 h-4" /> Find Best Roll Fit</>
+                        <><Zap className="h-4 w-4" /> Find Best Roll Fit</>
                     )}
                 </button>
             </div>

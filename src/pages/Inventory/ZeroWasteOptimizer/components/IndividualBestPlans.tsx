@@ -30,13 +30,20 @@ const IndividualBestPlans: React.FC<Props> = ({
     }, {} as Record<string, OrderRow[]>);
 
     return (
-        <div className="mb-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
-            <div className="flex items-center gap-2 mb-4 px-2">
-                <CheckCircle2 className="w-5 h-5 text-indigo-500" />
-                <h3 className="text-sm font-black text-gray-700 dark:text-gray-300 uppercase tracking-widest">
-                    Personal Best Roll for Each Order
-                </h3>
+        <div className="overflow-hidden rounded-[2rem] border border-gray-200 bg-white shadow-theme-sm dark:border-gray-800 dark:bg-gray-900">
+            <div className="flex flex-col gap-3 border-b border-gray-100 px-6 py-5 dark:border-gray-800 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex items-center gap-3">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-300">
+                        <CheckCircle2 className="h-5 w-5" />
+                    </div>
+                    <div>
+                        <p className="text-[11px] font-black uppercase tracking-[0.18em] text-brand-600 dark:text-brand-300">Client Planning</p>
+                        <h3 className="text-lg font-black text-gray-900 dark:text-white">Best Roll Match by Order</h3>
+                    </div>
+                </div>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Quick client-wise view before final production selection.</p>
             </div>
+            <div className="space-y-4 p-6">
 
             {/* 👤 CLIENT-WISE SUMMARY CARDS */}
             <div className="grid grid-cols-1 gap-6">
@@ -54,25 +61,24 @@ const IndividualBestPlans: React.FC<Props> = ({
                     }, 0);
 
                     return (
-                        <div key={clientName} className="bg-white dark:bg-gray-900 rounded-[1.5rem] border border-gray-200 dark:border-gray-800 p-6 shadow-sm">
-                            {/* Compact Client Header */}
-                            <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-100 dark:border-gray-800">
+                        <div key={clientName} className="rounded-2xl border border-gray-200 bg-gray-50/40 p-5 dark:border-gray-800 dark:bg-gray-800/20">
+                            <div className="mb-5 flex flex-col gap-3 border-b border-gray-200 pb-4 dark:border-gray-700 sm:flex-row sm:items-center sm:justify-between">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-black text-lg">
+                                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gray-900 text-base font-black text-white dark:bg-white dark:text-gray-900">
                                         {clientName.charAt(0).toUpperCase()}
                                     </div>
                                     <div>
-                                        <h4 className="font-black text-gray-800 dark:text-white text-base leading-none">{clientName}</h4>
-                                        <p className="text-[11px] text-gray-500 font-bold mt-1.5 uppercase tracking-wider">
+                                        <h4 className="text-base font-black text-gray-900 dark:text-white">{clientName}</h4>
+                                        <p className="mt-1 text-xs font-semibold uppercase tracking-[0.14em] text-gray-500 dark:text-gray-400">
                                             {clientOrders.length} orders · {totalSheets.toLocaleString()} sheets · {totalWeight.toFixed(1)} kg
                                         </p>
                                     </div>
                                 </div>
                                 <button
                                     onClick={() => shareClientSummaryOnWhatsApp(customerPhone, clientName, clientOrders, groupResults, selectedRollIndices)}
-                                    className="flex items-center gap-2 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-lg shadow-green-500/20"
+                                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-xs font-black uppercase tracking-[0.14em] text-white transition hover:bg-emerald-700"
                                 >
-                                    <Share2 className="w-4 h-4" />
+                                    <Share2 className="h-4 w-4" />
                                     Share Summary
                                 </button>
                             </div>
@@ -123,7 +129,7 @@ const IndividualBestPlans: React.FC<Props> = ({
                                             }
 
                                             return (
-                                                <tr key={o.id} className="group bg-gray-50/50 dark:bg-gray-800/40 hover:bg-white dark:hover:bg-gray-800 transition-all border border-transparent hover:border-indigo-100 dark:hover:border-indigo-900 shadow-xs hover:shadow-md rounded-2xl">
+                                                <tr key={o.id} className="group rounded-2xl border border-transparent bg-white transition-all hover:border-brand-100 hover:shadow-theme-sm dark:bg-gray-900/60 dark:hover:border-brand-500/20">
                                                     {/* Column 1: Dimensions & Quality */}
                                                     <td className="px-4 py-3 rounded-l-2xl border-y border-l border-gray-100/50 dark:border-gray-800/50">
                                                         <div className="flex items-center gap-3">
@@ -238,6 +244,7 @@ const IndividualBestPlans: React.FC<Props> = ({
                         </div>
                     );
                 })}
+            </div>
             </div>
         </div>
     );

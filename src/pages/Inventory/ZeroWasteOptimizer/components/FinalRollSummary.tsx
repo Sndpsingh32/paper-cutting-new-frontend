@@ -34,15 +34,23 @@ const FinalRollSummary: React.FC<Props> = ({
     if (activeRolls.length === 0) return null;
 
     return (
-        <div className="mb-10 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200">
-            <div className="flex items-center gap-2 mb-4 px-2">
-                <Layers className="w-5 h-5 text-emerald-500" />
-                <h3 className="text-sm font-black text-gray-700 dark:text-gray-300 uppercase tracking-widest">
-                    Selected Production Rolls Summary
-                </h3>
+        <div className="overflow-hidden rounded-[2rem] border border-gray-200 bg-white shadow-theme-sm dark:border-gray-800 dark:bg-gray-900">
+            <div className="flex flex-col gap-3 border-b border-gray-100 px-6 py-5 dark:border-gray-800 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex items-center gap-3">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-300">
+                        <Layers className="h-5 w-5" />
+                    </div>
+                    <div>
+                        <p className="text-[11px] font-black uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-300">Production Summary</p>
+                        <h3 className="text-lg font-black text-gray-900 dark:text-white">Selected Roll Plans</h3>
+                    </div>
+                </div>
+                <div className="rounded-xl bg-gray-50 px-3 py-2 text-xs font-bold text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+                    {activeRolls.length} active roll{activeRolls.length > 1 ? "s" : ""}
+                </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 gap-4 p-6 md:grid-cols-2 xl:grid-cols-4">
                 {activeRolls.map((item, idx) => {
                     const { groupKey, gsm, opt } = item;
                     const cw = opt.trimWastePercent;
@@ -67,62 +75,45 @@ const FinalRollSummary: React.FC<Props> = ({
                     }, 0);
 
                     return (
-                        <div 
-                            key={groupKey} 
-                            className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-4 shadow-sm hover:shadow-md transition-all border-l-4 border-l-emerald-500"
+                        <div
+                            key={groupKey}
+                            className="rounded-2xl border border-gray-200 bg-gray-50/60 p-4 transition hover:border-brand-200 hover:bg-white dark:border-gray-800 dark:bg-gray-800/40 dark:hover:border-brand-500/30 dark:hover:bg-gray-800"
                         >
-                            <div className="flex justify-between items-start mb-3">
+                            <div className="mb-4 flex items-start justify-between gap-3">
                                 <div>
-                                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none mb-1">Roll {idx + 1}</p>
-                                    <h4 className="text-sm font-black text-gray-800 dark:text-white flex items-center gap-1.5">
-                                        #{opt.reel.reelNo}
-                                    </h4>
+                                    <p className="text-[10px] font-black uppercase tracking-[0.16em] text-gray-400">Roll {idx + 1}</p>
+                                    <h4 className="mt-1 text-base font-black text-gray-900 dark:text-white">#{opt.reel.reelNo}</h4>
+                                    <p className="text-xs font-medium text-gray-500 dark:text-gray-400">{opt.reel.width}{opt.reel.sizeUnit} · {gsm} GSM</p>
                                 </div>
-                                <div className={`px-2 py-0.5 rounded-lg text-[9px] font-black ${cw < 1 ? 'bg-green-500 text-white' : cw < 5 ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'}`}>
+                                <div className={`rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] ${cw < 1 ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300' : cw < 5 ? 'bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300' : 'bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-300'}`}>
                                     {cw.toFixed(1)}% Trim
                                 </div>
                             </div>
 
-                            <div className="space-y-2">
-                                <div className="flex items-center justify-between text-xs">
-                                    <span className="text-gray-500 font-bold flex items-center gap-1">
-                                        <Ruler className="w-3 h-3" /> Size
-                                    </span>
-                                    <span className="text-gray-800 dark:text-gray-200 font-black">{opt.reel.width}{opt.reel.sizeUnit} · {gsm} GSM</span>
-                                </div>
-                                <div className="flex items-center justify-between text-xs">
-                                    <span className="text-gray-500 font-bold flex items-center gap-1">
-                                        <Layers className="w-3 h-3" /> Produced Sheets
-                                    </span>
-                                    <span className="text-gray-800 dark:text-gray-200 font-black">
+                            <div className="space-y-3 text-sm">
+                                <div className="flex items-center justify-between">
+                                    <span className="flex items-center gap-2 text-gray-500 dark:text-gray-400"><Layers className="h-4 w-4" />Produced</span>
+                                    <span className="font-black text-gray-900 dark:text-white">
                                         {opt.stripsLayout.reduce((total: number, s: any, sIdx: number) => {
                                             if (groupSkippedStrips[sIdx]) return total;
                                             if (groupManualSheets[sIdx] !== undefined) return total + groupManualSheets[sIdx];
                                             return total + (groupStripModes[sIdx] ? s.totalSheets : s.usableSheets);
-                                        }, 0).toLocaleString()}
+                                        }, 0).toLocaleString()} sht
                                     </span>
                                 </div>
-                                <div className="flex items-center justify-between text-xs pt-2 border-t border-gray-50 dark:border-gray-800">
-                                    <span className="text-gray-500 font-bold flex items-center gap-1">
-                                        <Weight className="w-3 h-3" /> Roll / Consumed
-                                    </span>
-                                    <span className="text-gray-800 dark:text-gray-200 font-black">
-                                        {(opt.reel.totalWeightKg || 0).toFixed(0)}kg / <span className="text-emerald-600">{liveConsumedWeightKg.toFixed(1)}kg</span>
-                                    </span>
+                                <div className="flex items-center justify-between">
+                                    <span className="flex items-center gap-2 text-gray-500 dark:text-gray-400"><Weight className="h-4 w-4" />Consumed</span>
+                                    <span className="font-black text-gray-900 dark:text-white">{liveConsumedWeightKg.toFixed(1)} / {(opt.reel.totalWeightKg || 0).toFixed(0)} kg</span>
                                 </div>
-                                <div className="flex items-center justify-between text-xs">
-                                    <span className="text-gray-500 font-bold flex items-center gap-1">
-                                        <Ruler className="w-3 h-3" /> Side-Cut Reel
-                                    </span>
-                                    <span className="text-amber-600 font-black">
-                                        {opt.trimWasteMm < 1 ? 'Zero' : `${(opt.trimWasteMm / 25.4).toFixed(2)}"`}
-                                    </span>
+                                <div className="flex items-center justify-between">
+                                    <span className="flex items-center gap-2 text-gray-500 dark:text-gray-400"><Ruler className="h-4 w-4" />Side-cut</span>
+                                    <span className="font-black text-gray-900 dark:text-white">{opt.trimWasteMm < 1 ? 'Zero' : `${(opt.trimWasteMm / 25.4).toFixed(2)}"`}</span>
                                 </div>
                             </div>
-                            
-                            <div className="mt-3 flex items-center gap-1.5 px-2 py-1 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
-                                <CheckCircle2 className="w-3 h-3 text-emerald-500" />
-                                <span className="text-[10px] font-black text-gray-400 uppercase">Optimal Plan Applied</span>
+
+                            <div className="mt-4 flex items-center gap-2 rounded-xl bg-white px-3 py-2 text-[11px] font-bold text-gray-500 ring-1 ring-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:ring-gray-700">
+                                <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                                Optimal plan applied
                             </div>
                         </div>
                     );

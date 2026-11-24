@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { XCircle, AlertTriangle, FileDown, Share2, RotateCcw, Weight, ShoppingCart, Edit3, Save, X, Zap } from 'lucide-react';
+import { XCircle, AlertTriangle, FileDown, Share2, RotateCcw, ShoppingCart, Edit3, Save, X, Zap } from 'lucide-react';
 import { GroupResult } from "../types";
 import { generatePDF, shareReportPDF, shareOnWhatsApp } from "../sharing";
 import { calcTotalWeightKg } from "../helpers";
@@ -201,35 +201,44 @@ const GroupResultCard: React.FC<Props> = ({
 
     return (
         <>
-            <div key={group.key} id={`group-${group.key}`} className="rounded-3xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-xl">
-                {/* ── Group Header ── */}
-                <div className="bg-linear-to-r from-indigo-700 to-violet-700 px-6 py-4 flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-2xl bg-white/20 flex items-center justify-center text-white font-black text-lg">G{gIdx + 1}</div>
-                        <div>
-                            <p className="text-white font-black text-lg">{groupLabel}</p>
-                            <p className="text-indigo-200 text-xs font-bold mt-0.5">
-                                {group.orders.length} order{group.orders.length > 1 ? 's' : ''}: {groupClients}
-                            </p>
-                        </div>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                        {group.orders.map((o, oi) => (
-                            <div key={o.id} className="text-center px-3 py-1.5 bg-white/15 rounded-xl">
-                                <p className="text-white text-xs font-black">{o.client || `Party ${oi + 1}`}</p>
-                                <p className="text-indigo-200 text-[10px] font-bold">{o.reelSize}{o.reelSizeUnit} × {o.cutSize}{o.cutSizeUnit} · {Number(o.qty).toLocaleString()} sht</p>
+            <div key={group.key} id={`group-${group.key}`} className="overflow-hidden rounded-[2rem] border border-gray-200 bg-white shadow-theme-sm dark:border-gray-800 dark:bg-gray-900">
+                <div className="border-b border-gray-100 bg-linear-to-r from-slate-950 via-slate-900 to-brand-950 px-6 py-5 dark:border-gray-800 sm:px-7">
+                    <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
+                        <div className="flex items-start gap-4">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 text-lg font-black text-white ring-1 ring-white/15">
+                                G{gIdx + 1}
                             </div>
-                        ))}
+                            <div>
+                                <div className="inline-flex items-center rounded-full bg-brand-500/15 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-brand-200">
+                                    Optimization Group
+                                </div>
+                                <p className="mt-3 text-2xl font-black tracking-tight text-white">{groupLabel}</p>
+                                <p className="mt-1 text-sm text-slate-300">
+                                    {group.orders.length} order{group.orders.length > 1 ? 's' : ''} · {groupClients}
+                                </p>
+                            </div>
+                        </div>
+                        <div className="flex flex-wrap gap-2 xl:max-w-[55%] xl:justify-end">
+                            {group.orders.map((o, oi) => (
+                                <div key={o.id} className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 backdrop-blur-sm">
+                                    <p className="text-xs font-bold text-white">{o.client || `Party ${oi + 1}`}</p>
+                                    <p className="mt-0.5 text-[11px] font-medium text-slate-300">{o.reelSize}{o.reelSizeUnit} × {o.cutSize}{o.cutSizeUnit} · {Number(o.qty).toLocaleString()} sht</p>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
 
                 {/* ── No Reels Found ── */}
                 {noReelsFound && (
-                    <div className="bg-gray-50 dark:bg-gray-800/50 p-6 flex items-center gap-3">
-                        <XCircle className="w-5 h-5 text-red-400 shrink-0" />
-                        <p className="text-gray-600 dark:text-gray-400 font-bold text-sm">
-                            {groupLabel} ke liye koi roll stock mein nahi mila.
-                        </p>
+                    <div className="flex items-center gap-3 border-t border-gray-100 bg-gray-50/70 px-6 py-5 dark:border-gray-800 dark:bg-gray-800/30">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-50 text-red-500 dark:bg-red-500/10">
+                            <XCircle className="h-5 w-5" />
+                        </div>
+                        <div>
+                            <p className="text-sm font-bold text-gray-800 dark:text-white">No roll stock available for this group</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">{groupLabel} ke liye matching roll inventory nahi mila.</p>
+                        </div>
                     </div>
                 )}
 
@@ -259,7 +268,12 @@ const GroupResultCard: React.FC<Props> = ({
 
                 {/* ── Roll Options Tabs ── */}
                 {!noReelsFound && fittable.length > 1 && (
-                    <div className="bg-gray-50/50 dark:bg-gray-800/20 p-4 flex gap-3 overflow-x-auto no-scrollbar border-y border-gray-100 dark:border-gray-800">
+                    <div className="border-y border-gray-100 bg-gray-50/70 px-5 py-4 dark:border-gray-800 dark:bg-gray-800/20">
+                        <div className="mb-3 flex items-center justify-between">
+                            <p className="text-[11px] font-black uppercase tracking-[0.16em] text-gray-500 dark:text-gray-400">Available Roll Options</p>
+                            <p className="text-xs text-gray-400 dark:text-gray-500">Select the best plan for production</p>
+                        </div>
+                        <div className="flex gap-3 overflow-x-auto pb-1 no-scrollbar">
                         {fittable.map((opt, oIdx) => {
                             const active = opt.reel._id === bestRoll?.reel?._id;
                             const cw = opt.trimWastePercent;
@@ -267,34 +281,32 @@ const GroupResultCard: React.FC<Props> = ({
                                 <button
                                     key={`${opt.reel._id}-${oIdx}`}
                                     onClick={() => {
-                                        // Store the actual index from the fittable list as the selected index
                                         setSelectedRollIndices(prev => ({ ...prev, [group.key]: oIdx }));
                                     }}
-                                    className={`shrink-0 px-4 py-2.5 rounded-2xl border-2 transition-all text-left min-w-[160px] ${active
-                                        ? 'bg-white dark:bg-gray-800 border-indigo-500 shadow-lg scale-[1.02]'
-                                        : 'bg-transparent border-transparent hover:border-gray-200 opacity-60'
+                                    className={`min-w-[190px] shrink-0 rounded-2xl border px-4 py-3 text-left transition-all ${active
+                                        ? 'border-brand-300 bg-white shadow-theme-sm ring-4 ring-brand-500/10 dark:border-brand-500/40 dark:bg-gray-900'
+                                        : 'border-gray-200 bg-white/70 hover:border-gray-300 hover:bg-white dark:border-gray-700 dark:bg-gray-900/40 dark:hover:border-gray-600'
                                         }`}
                                 >
-                                    <div className="flex items-center justify-between mb-1">
-                                        <span className={`text-[11px] font-black ${active ? 'text-indigo-600' : 'text-gray-500'}`}>
-                                            {opt.reel.isPattiStock ? 'STRIP' : 'ROLL'} #{opt.reel.reelNo}
+                                    <div className="mb-2 flex items-center justify-between gap-2">
+                                        <span className={`text-xs font-black ${active ? 'text-brand-700 dark:text-brand-300' : 'text-gray-700 dark:text-gray-200'}`}>
+                                            {opt.reel.isPattiStock ? 'Strip' : 'Roll'} #{opt.reel.reelNo}
                                         </span>
-                                        {opt.reel.isPattiStock ? (
-                                            <Zap className="w-2.5 h-2.5 text-emerald-500 fill-current" />
-                                        ) : (
-                                            <div className={`w-1.5 h-1.5 rounded-full ${opt.wasteCategory === 'zero' ? 'bg-green-500' : opt.wasteCategory === 'low' ? 'bg-yellow-500' : 'bg-red-500'}`} />
-                                        )}
+                                        <span className={`rounded-full px-2 py-0.5 text-[10px] font-black uppercase ${opt.wasteCategory === 'zero' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300' : opt.wasteCategory === 'low' ? 'bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300' : 'bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-300'}`}>
+                                            {opt.wasteCategory}
+                                        </span>
                                     </div>
-                                    <div className="text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-tight">
+                                    <div className="text-xs font-semibold text-gray-600 dark:text-gray-300">
                                         {formatReelWidth(opt.reel)} · {opt.reel.currentBalanceKg.toFixed(1)}kg
                                     </div>
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-[9px] font-black text-gray-400 capitalize">{opt.wasteCategory} waste</span>
-                                        <span className={`text-[10px] font-black ${cw > 5 ? 'text-red-500' : 'text-green-600'}`}>{cw.toFixed(1)}%</span>
+                                    <div className="mt-2 flex items-center justify-between text-[11px]">
+                                        <span className="font-medium text-gray-400 dark:text-gray-500">Trim waste</span>
+                                        <span className={`font-black ${cw > 5 ? 'text-red-500' : 'text-emerald-600 dark:text-emerald-400'}`}>{cw.toFixed(1)}%</span>
                                     </div>
                                 </button>
                             );
                         })}
+                        </div>
                     </div>
                 )}
 
@@ -310,125 +322,131 @@ const GroupResultCard: React.FC<Props> = ({
                                 ? 'bg-yellow-500' : 'bg-gray-500';
 
                     return (
-                        <div className="bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
-                            {/* Subheader */}
-                            <div className={`${headerBg} px-6 py-3 flex items-center justify-between`}>
-                                <div className="flex items-center gap-3">
-                                    <span className="text-white font-black text-sm">
-                                        {displayIdx === 0 ? '🏆 Best Match' : `Option #${displayIdx + 1}`}: {isReadyStrip ? 'Ready Strip' : 'Roll'} #{bestRoll.reel.reelNo}
-                                    </span>
-                                    <span className="text-white/80 text-xs font-bold">
-                                        {formatReelWidth(bestRoll.reel)} wide · {bestRoll.reel.gsm} GSM · {bestRoll.reel.quality} · {bestRoll.reel.currentBalanceKg.toFixed(1)} Kg
-                                    </span>
-                                    {isReadyStrip ? (
-                                        <span className="px-2 py-0.5 bg-white text-emerald-600 text-[9px] font-black rounded-lg uppercase shadow-sm flex items-center gap-1">
-                                            <Zap className="w-2 h-2 fill-current" /> Ready Strip
+                        <div className="border-t border-gray-100 bg-white dark:border-gray-800 dark:bg-gray-900">
+                            <div className={`${headerBg} px-6 py-4`}>
+                                <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                                    <div className="flex flex-wrap items-center gap-3">
+                                        <span className="inline-flex items-center rounded-full bg-white/15 px-3 py-1 text-[11px] font-black uppercase tracking-[0.14em] text-white/90">
+                                            {displayIdx === 0 ? 'Best Match' : `Option #${displayIdx + 1}`}
                                         </span>
-                                    ) : isPartialReel ? (
-                                        <span className="px-2 py-0.5 bg-white/20 text-white text-[9px] font-black rounded-lg uppercase">⭐ Leftover</span>
-                                    ) : null}
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    {/* Create Sale Button for entire roll */}
-                                    <button
-                                        onClick={handleCreateSale}
-                                        className="px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors shadow-lg"
-                                    >
-                                        <ShoppingCart className="w-3 h-3" />
-                                        Create Sale
-                                    </button>
-                                    {bestRoll.isZeroWaste ? (
-                                        <span className="bg-white text-green-700 px-3 py-1 rounded-xl text-xs font-black shadow-sm">✅ ZERO WASTE</span>
-                                    ) : combinedWaste <= 10 ? (
-                                        <span className="bg-white text-yellow-700 px-3 py-1 rounded-xl text-xs font-black shadow-sm">⚠️ {combinedWaste.toFixed(1)}% — Review Required</span>
-                                    ) : (
-                                        <span className="bg-white/20 text-white px-3 py-1 rounded-xl text-xs font-black">❌ {combinedWaste.toFixed(1)}% — High Waste</span>
-                                    )}
+                                        <div>
+                                            <p className="text-base font-black text-white">
+                                                {isReadyStrip ? 'Ready Strip' : 'Roll'} #{bestRoll.reel.reelNo}
+                                            </p>
+                                            <p className="text-xs font-medium text-white/80">
+                                                {formatReelWidth(bestRoll.reel)} wide · {bestRoll.reel.gsm} GSM · {bestRoll.reel.quality} · {bestRoll.reel.currentBalanceKg.toFixed(1)} Kg
+                                            </p>
+                                        </div>
+                                        {isReadyStrip ? (
+                                            <span className="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-[10px] font-black uppercase text-emerald-700">
+                                                <Zap className="h-3 w-3 fill-current" /> Ready Strip
+                                            </span>
+                                        ) : isPartialReel ? (
+                                            <span className="rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-black uppercase text-white">Leftover Roll</span>
+                                        ) : null}
+                                    </div>
+                                    <div className="flex flex-wrap items-center gap-2">
+                                        <button
+                                            onClick={handleCreateSale}
+                                            className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2 text-xs font-black uppercase tracking-[0.12em] text-gray-900 transition hover:bg-gray-100"
+                                        >
+                                            <ShoppingCart className="h-3.5 w-3.5" />
+                                            Create Sale
+                                        </button>
+                                        {bestRoll.isZeroWaste ? (
+                                            <span className="rounded-xl bg-white/15 px-3 py-2 text-xs font-black text-white ring-1 ring-white/20">Zero Waste</span>
+                                        ) : combinedWaste <= 10 ? (
+                                            <span className="rounded-xl bg-amber-400/20 px-3 py-2 text-xs font-black text-white ring-1 ring-amber-200/30">{combinedWaste.toFixed(1)}% Trim · Review</span>
+                                        ) : (
+                                            <span className="rounded-xl bg-red-500/20 px-3 py-2 text-xs font-black text-white ring-1 ring-red-200/30">{combinedWaste.toFixed(1)}% Trim · High Waste</span>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
 
-                            {/* Summary Area */}
-                            <div className="p-6 bg-indigo-50/30 dark:bg-indigo-900/10 border-b border-indigo-100/50 dark:border-indigo-900/20">
-                                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                                    {/* Left: Decision */}
-                                    <div className="flex flex-col justify-center">
-                                        <div className="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-1">Production Decision</div>
-                                        <div className={`text-2xl font-black uppercase tracking-tight ${(bestRoll.wasteCategory === 'zero' || bestRoll.wasteCategory === 'low') ? 'text-green-600' :
-                                            bestRoll.wasteCategory === 'medium' ? 'text-amber-500' : 'text-red-500'
-                                            }`}>
+                            <div className="border-b border-gray-100 bg-white px-6 py-5 dark:border-gray-800 dark:bg-gray-900">
+                                <div className="flex flex-col gap-5 xl:flex-row xl:items-center">
+                                    <div className="min-w-0 xl:w-[260px] xl:shrink-0">
+                                        <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-gray-400">Production Decision</p>
+                                        <p className={`mt-1.5 text-lg font-black leading-snug ${
+                                            (bestRoll.wasteCategory === 'zero' || bestRoll.wasteCategory === 'low')
+                                                ? 'text-emerald-600 dark:text-emerald-400'
+                                                : bestRoll.wasteCategory === 'medium'
+                                                    ? 'text-amber-500'
+                                                    : 'text-red-500'
+                                        }`}>
                                             {bestRoll.recommendation}
-                                        </div>
-                                        <div className="flex flex-wrap gap-1.5 mt-2">
-                                            {bestRoll.wasteReasons.map(r => (
-                                                <span key={r} className="px-2 py-0.5 bg-white dark:bg-gray-800 border border-indigo-100 dark:border-indigo-900/30 rounded text-[9px] font-bold text-indigo-600">
-                                                    {r}
-                                                </span>
-                                            ))}
-                                        </div>
+                                        </p>
+                                        {bestRoll.wasteReasons.length > 0 && (
+                                            <p className="mt-1 text-xs leading-5 text-gray-500 dark:text-gray-400">
+                                                {bestRoll.wasteReasons.slice(0, 2).join(' · ')}
+                                            </p>
+                                        )}
                                     </div>
 
-                                    {/* Right: Stats */}
-                                    <div className="lg:col-span-2 grid grid-cols-4 gap-4 border-l border-indigo-100 dark:border-indigo-900/30 pl-6">
-                                        <div className="flex flex-col">
-                                            <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">🏭 Machine Produces</div>
-                                            <div className="text-xl font-black text-indigo-600">{calculatedStats.totalOutputSheets.toLocaleString()} <span className="text-xs opacity-60">Sht</span></div>
-                                            <div className="text-[9px] text-gray-400 font-bold mt-1">Total physical output</div>
+                                    <div className="hidden h-14 w-px bg-gray-200 dark:bg-gray-700 xl:block" />
+
+                                    <div className="grid flex-1 grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-4">
+                                        <div>
+                                            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-gray-400">Output</p>
+                                            <p className="mt-1 text-2xl font-black tracking-tight text-gray-900 dark:text-white">
+                                                {calculatedStats.totalOutputSheets.toLocaleString()}
+                                                <span className="ml-1 text-xs font-semibold text-gray-400">sht</span>
+                                            </p>
                                         </div>
-                                        <div className="flex flex-col">
-                                            <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">📋 Customer Needs</div>
-                                            <div className="text-xl font-black text-gray-800 dark:text-white">{bestRoll.totalOrderedSheets.toLocaleString()} <span className="text-xs opacity-60">Sht</span></div>
-                                            <div className="text-[9px] text-gray-400 font-bold mt-1">Fulfilled from this roll</div>
+                                        <div>
+                                            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-gray-400">Required</p>
+                                            <p className="mt-1 text-2xl font-black tracking-tight text-gray-900 dark:text-white">
+                                                {bestRoll.totalOrderedSheets.toLocaleString()}
+                                                <span className="ml-1 text-xs font-semibold text-gray-400">sht</span>
+                                            </p>
                                         </div>
-                                        <div className="flex flex-col">
-                                            <div className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1 flex items-center gap-1"><Weight className="w-3 h-3" /> Produced Weight</div>
-                                            <div className="text-xl font-black text-emerald-600">{calculatedStats.totalWeightKg.toFixed(2)} <span className="text-xs opacity-60">kg</span></div>
-                                            <div className="text-[9px] text-gray-400 font-bold mt-1">Active selection weight</div>
+                                        <div>
+                                            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-gray-400">Weight</p>
+                                            <p className="mt-1 text-2xl font-black tracking-tight text-emerald-600 dark:text-emerald-400">
+                                                {calculatedStats.totalWeightKg.toFixed(2)}
+                                                <span className="ml-1 text-xs font-semibold text-gray-400">kg</span>
+                                            </p>
                                         </div>
-                                        <div className="flex flex-col">
-                                            <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">📦 Side-Cut Reel</div>
-                                            <div className={`text-xl font-black ${effectiveIsZeroWaste ? 'text-green-600'
-                                                : (effectiveTrimWasteMm > 20 && effectiveTrimWasteMm < 450) ? 'text-orange-500'
-                                                    : 'text-blue-600'
-                                                }`}>
-                                                {formatSize(effectiveTrimWasteMm).val} <span className="text-xs opacity-60">{formatSize(effectiveTrimWasteMm).unit}</span>
-                                            </div>
-                                            <div className="text-[9px] text-gray-400 font-bold mt-1">
-                                                {effectiveIsZeroWaste
-                                                    ? 'Perfect fit - No side-cut reel'
-                                                    : effectiveTrimWasteMm > 20 && effectiveTrimWasteMm < 450
-                                                        ? `Dead zone (${effectiveTrimWastePercent.toFixed(1)}%) - Consider fewer orders`
-                                                        : `Small Roll for inventory (${effectiveTrimWastePercent.toFixed(1)}% of roll)`}
-                                            </div>
-                                            {skippedWidthMm > 0 && (
-                                                <div className="mt-1 text-[9px] font-black text-amber-600">
-                                                    ↑ +{formatSize(skippedWidthMm).val} {formatSize(skippedWidthMm).unit} from skipped strip
-                                                </div>
-                                            )}
-                                            {bestRoll.actionableAdjustment && (
-                                                <div className="mt-2 text-[10px] text-amber-700 font-bold bg-amber-50 rounded border border-amber-200 overflow-hidden shadow-sm flex flex-col sm:flex-row">
-                                                    <div className="px-2 py-1.5 flex-1 flex items-center gap-1.5">
-                                                        <span>💡</span>
-                                                        <span>{bestRoll.actionableAdjustment.label} for Zero Waste</span>
-                                                    </div>
-                                                    {applyLocalOverride && (
-                                                        <button
-                                                            onClick={async () => {
-                                                                const exactMmVal = String(bestRoll.actionableAdjustment!.adjustToWidthMm);
-                                                                const isRotated = bestRoll.actionableAdjustment!.isWidthRotated;
-                                                                const overrides = isRotated ? { cutSize: exactMmVal } : { reelSize: exactMmVal };
-                                                                applyLocalOverride(groupKey, bestRoll.actionableAdjustment!.orderId, overrides);
-                                                                toast.info(`Adjusted local layout to ${exactMmVal}mm!`);
-                                                            }}
-                                                            className="bg-amber-100 hover:bg-amber-200 text-amber-800 px-3 py-1.5 transition-colors font-black border-t sm:border-t-0 sm:border-l border-amber-200 flex items-center justify-center"
-                                                        >
-                                                            APPLY
-                                                        </button>
-                                                    )}
-                                                </div>
-                                            )}
+                                        <div>
+                                            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-gray-400">Side Cut</p>
+                                            <p className={`mt-1 text-2xl font-black tracking-tight ${effectiveIsZeroWaste ? 'text-emerald-600 dark:text-emerald-400' : (effectiveTrimWasteMm > 20 && effectiveTrimWasteMm < 450) ? 'text-amber-500' : 'text-gray-900 dark:text-white'}`}>
+                                                {formatSize(effectiveTrimWasteMm).val}
+                                                <span className="ml-1 text-xs font-semibold text-gray-400">{formatSize(effectiveTrimWasteMm).unit}</span>
+                                            </p>
+                                            <p className="text-[11px] text-gray-400">{effectiveTrimWastePercent.toFixed(1)}% trim</p>
                                         </div>
                                     </div>
                                 </div>
+
+                                {(skippedWidthMm > 0 || bestRoll.actionableAdjustment) && (
+                                    <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-gray-100 pt-4 dark:border-gray-800">
+                                        {skippedWidthMm > 0 && (
+                                            <span className="inline-flex items-center rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-700 dark:bg-amber-500/10 dark:text-amber-300">
+                                                +{formatSize(skippedWidthMm).val} {formatSize(skippedWidthMm).unit} from skipped strip
+                                            </span>
+                                        )}
+                                        {bestRoll.actionableAdjustment && (
+                                            <div className="inline-flex flex-wrap items-center gap-2 rounded-lg bg-amber-50 px-3 py-1.5 dark:bg-amber-500/10">
+                                                <span className="text-xs font-medium text-amber-800 dark:text-amber-200">{bestRoll.actionableAdjustment.label} for zero waste</span>
+                                                {applyLocalOverride && (
+                                                    <button
+                                                        onClick={async () => {
+                                                            const exactMmVal = String(bestRoll.actionableAdjustment!.adjustToWidthMm);
+                                                            const isRotated = bestRoll.actionableAdjustment!.isWidthRotated;
+                                                            const overrides = isRotated ? { cutSize: exactMmVal } : { reelSize: exactMmVal };
+                                                            applyLocalOverride(groupKey, bestRoll.actionableAdjustment!.orderId, overrides);
+                                                            toast.info(`Adjusted local layout to ${exactMmVal}mm!`);
+                                                        }}
+                                                        className="rounded-md bg-amber-200 px-2.5 py-1 text-[11px] font-bold text-amber-900 transition hover:bg-amber-300 dark:bg-amber-400/20 dark:text-amber-100 dark:hover:bg-amber-400/30"
+                                                    >
+                                                        Apply
+                                                    </button>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
                             </div>
 
                             {/* Layout Content */}
@@ -729,26 +747,26 @@ const GroupResultCard: React.FC<Props> = ({
                                 </div>
 
                                 {/* Actions */}
-                                <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-gray-100 dark:border-gray-800">
-                                    <div className="flex items-center gap-3">
+                                <div className="flex flex-col gap-4 border-t border-gray-100 pt-5 dark:border-gray-800 sm:flex-row sm:items-center sm:justify-between">
+                                    <div className="flex flex-wrap items-center gap-3">
                                         <button
                                             onClick={() => generatePDF(bestRoll, currentStripModes)}
-                                            className="flex items-center gap-2 px-4 py-2 bg-gray-900 dark:bg-black text-white rounded-xl text-xs font-black uppercase tracking-widest hover:scale-[1.02] transition-all shadow-md active:scale-95"
+                                            className="inline-flex items-center gap-2 rounded-xl bg-gray-900 px-4 py-2.5 text-xs font-black uppercase tracking-[0.12em] text-white transition hover:bg-black dark:bg-white dark:text-gray-900"
                                         >
-                                            <FileDown className="w-3.5 h-3.5" /> PDF Report
+                                            <FileDown className="h-4 w-4" /> PDF Report
                                         </button>
                                         <button
                                             onClick={() => shareReportPDF(bestRoll, currentStripModes)}
-                                            className="flex items-center gap-2 px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-xl text-xs font-bold text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all active:scale-95"
+                                            className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-xs font-bold text-gray-700 transition hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-800"
                                         >
-                                            <Share2 className="w-3.5 h-3.5" /> Share Report
+                                            <Share2 className="h-4 w-4" /> Share Report
                                         </button>
                                     </div>
                                     <button
                                         onClick={() => shareOnWhatsApp(customerPhone, bestRoll, "Order Summary: Mixed Selections", currentStripModes)}
-                                        className="flex items-center gap-2 px-6 py-2 bg-green-500 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-green-600 transition-all shadow-lg shadow-green-500/20 active:scale-95"
+                                        className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-xs font-black uppercase tracking-[0.12em] text-white transition hover:bg-emerald-700"
                                     >
-                                        Share on WhatsApp
+                                        <Share2 className="h-4 w-4" /> Share on WhatsApp
                                     </button>
                                 </div>
                             </div>
