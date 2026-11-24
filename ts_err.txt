@@ -1,0 +1,3 @@
+src/pages/Inventory/ZeroWasteOptimizer.tsx(12,43): error TS6133: 'Info' is declared but its value is never read.
+src/pages/Inventory/ZeroWasteOptimizer.tsx(92,7): error TS6133: 'fromCm' is declared but its value is never read.
+src/pages/SheetManagement/AddandUpdateSheet/AddandUpdateSheet.tsx(771,62): error TS6133: 'idx' is declared but its value is never read.
