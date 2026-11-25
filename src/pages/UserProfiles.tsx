@@ -12,10 +12,10 @@ export default function UserProfiles() {
     return (
       <>
         <PageMeta
-          title="User Profile | Paper Cutting - Service Management System"
-          description="User profile page for Paper Cutting service management system"
+          title="User Profile | Paper Sheet Trade"
+          description="User profile page for Paper Sheet Trade"
         />
-        <div className="flex items-center justify-center min-h-screen">
+        <div className="flex min-h-[60vh] items-center justify-center">
           <Loader size="lg" color="primary" />
         </div>
       </>
@@ -28,10 +28,14 @@ export default function UserProfiles() {
         title="User Profile | Paper Sheet Trade"
         description="User profile management"
       />
-      <PageBreadcrumb pageTitle="My Profile" />
-      <div className="max-w-4xl mx-auto space-y-6 lg:space-y-8 pb-10 px-4">
-        <UserMetaCard />
-        <UserInfoCard />
+
+      <div className="space-y-6 pb-10">
+        <PageBreadcrumb pageTitle="My Profile" />
+
+        <div className="mx-auto max-w-6xl space-y-6">
+          <UserMetaCard />
+          <UserInfoCard />
+        </div>
       </div>
     </>
   );

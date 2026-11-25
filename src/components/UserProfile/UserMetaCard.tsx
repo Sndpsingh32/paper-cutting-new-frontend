@@ -89,42 +89,45 @@ export default function UserMetaCard() {
   );
 
   return (
-    <div className="overflow-hidden bg-white border border-gray-200 rounded-3xl dark:border-gray-800 dark:bg-white/[0.03] shadow-sm">
-      {/* Banner Area */}
-      <div className="relative h-28 bg-linear-to-r from-brand-500/10 via-indigo-500/5 to-accent-500/10 dark:from-brand-500/20 dark:to-accent-500/20">
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
+    <div className="overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900/60">
+      <div className="relative h-32 overflow-hidden sm:h-36">
+        <img
+          src="/images/warehouse-paper-rolls.png"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-gray-950/45 via-gray-900/20 to-brand-950/35" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-white/5" />
       </div>
-      
-      <div className="px-5 pb-6 -mt-12 lg:px-8">
-        <div className="flex flex-col items-center gap-5 lg:flex-row lg:items-end lg:justify-between">
-          <div className="flex flex-col items-center gap-5 lg:flex-row lg:items-end">
-            {/* Avatar Section */}
-            <div className="relative group">
-              <div className="w-28 h-28 overflow-hidden border-4 border-white rounded-full shadow-xl dark:border-gray-900 ring-1 ring-gray-100 dark:ring-white/10">
+
+      <div className="px-5 pb-6 sm:px-8">
+        <div className="-mt-14 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+          <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-end sm:gap-5">
+            <div className="relative group shrink-0">
+              <div className="h-28 w-28 overflow-hidden rounded-3xl border-4 border-white bg-white shadow-xl ring-1 ring-black/5 dark:border-gray-900 dark:bg-gray-800 dark:ring-white/10 sm:h-32 sm:w-32">
                 {isUploading ? (
-                  <div className="flex items-center justify-center w-full h-full bg-gray-50 dark:bg-gray-800">
+                  <div className="flex h-full w-full items-center justify-center bg-gray-50 dark:bg-gray-800">
                     <Loader size="sm" />
                   </div>
+                ) : profile?.avatar && !imgError ? (
+                  <img
+                    src={profile.avatar}
+                    alt="user"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    onError={() => setImgError(true)}
+                  />
                 ) : (
-                  profile?.avatar && !imgError ? (
-                    <img
-                      src={profile.avatar}
-                      alt="user"
-                      className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
-                      onError={() => setImgError(true)}
-                    />
-                  ) : (
-                    <DefaultUserIcon />
-                  )
+                  <DefaultUserIcon />
                 )}
               </div>
               <button
                 onClick={handleAvatarClick}
                 disabled={isUploading}
-                className="absolute bottom-1 right-1 flex items-center justify-center w-9 h-9 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full shadow-lg hover:scale-110 hover:border-brand-500 transition-all z-10 group/edit"
+                className="absolute -bottom-2 -right-2 flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-600 shadow-lg transition-all hover:-translate-y-0.5 hover:border-brand-300 hover:text-brand-600 disabled:opacity-60 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:text-brand-400"
                 title="Change Profile Picture"
               >
-                <svg className="w-5 h-5 text-gray-500 group-hover/edit:text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
@@ -132,26 +135,31 @@ export default function UserMetaCard() {
               <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept="image/*" />
             </div>
 
-            {/* Name Section */}
-            <div className="mb-1 text-center lg:text-left">
-              <h4 className="text-2xl font-black text-gray-900 dark:text-white leading-tight tracking-tight">
+            <div className="pb-1 text-center sm:text-left">
+              <h2 className="text-2xl font-black tracking-tight text-gray-900 dark:text-white sm:text-3xl">
                 {profile?.fullName || "User Name"}
-              </h4>
-              <p className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400 uppercase tracking-widest mt-1.5 border border-brand-100 dark:border-brand-500/20">
-                {profile?.role || "Member"}
-              </p>
+              </h2>
+              <div className="mt-2 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
+                <span className="inline-flex items-center rounded-full border border-brand-100 bg-brand-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand-700 dark:border-brand-500/20 dark:bg-brand-500/10 dark:text-brand-300">
+                  {profile?.role || "Member"}
+                </span>
+                {profile?.email && (
+                  <span className="inline-flex max-w-full items-center rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600 dark:bg-gray-800 dark:text-gray-300">
+                    <span className="truncate">{profile.email}</span>
+                  </span>
+                )}
+              </div>
             </div>
           </div>
 
-          {/* Edit Button */}
           <button
             onClick={openModal}
-            className="flex items-center gap-2 px-5 py-2.5 text-sm font-bold text-white transition-all rounded-xl bg-brand-600 hover:bg-brand-700 hover:shadow-lg hover:shadow-brand-500/30 active:scale-95 mb-1"
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-brand-500/20 transition-all hover:-translate-y-0.5 hover:bg-brand-700 active:translate-y-0"
           >
-            <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
             </svg>
-            Edit Information
+            Edit Profile
           </button>
         </div>
       </div>

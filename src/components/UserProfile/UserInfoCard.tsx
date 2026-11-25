@@ -17,15 +17,15 @@ export default function UserInfoCard() {
   };
 
   const InfoItem = ({ label, value, icon }: { label: string; value: string; icon: React.ReactNode }) => (
-    <div className="flex items-center gap-4 p-3.5 rounded-2xl bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-white/5 group hover:border-brand-500/30 transition-all duration-300">
-      <div className="flex items-center justify-center w-11 h-11 rounded-xl bg-white dark:bg-gray-800 shadow-sm border border-gray-200 dark:border-gray-700 text-brand-500 group-hover:scale-110 transition-transform">
+    <div className="group flex items-start gap-4 rounded-2xl border border-gray-100 bg-gray-50/70 p-4 transition-all duration-200 hover:border-brand-200 hover:bg-white hover:shadow-sm dark:border-gray-800 dark:bg-gray-800/40 dark:hover:border-brand-500/30 dark:hover:bg-gray-800">
+      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-brand-600 shadow-sm ring-1 ring-gray-100 dark:bg-gray-900 dark:text-brand-400 dark:ring-gray-700">
         {icon}
       </div>
-      <div>
-        <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-0.5">
+      <div className="min-w-0">
+        <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gray-400 dark:text-gray-500">
           {label}
         </p>
-        <p className="text-sm font-bold text-gray-800 dark:text-white truncate max-w-[180px]">
+        <p className="mt-1 break-words text-sm font-semibold text-gray-900 dark:text-white sm:text-base">
           {value || "N/A"}
         </p>
       </div>
@@ -33,15 +33,23 @@ export default function UserInfoCard() {
   );
 
   return (
-    <div className="p-4 bg-white border border-gray-200 rounded-3xl dark:border-gray-800 dark:bg-white/5 shadow-sm lg:p-6">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="w-1.5 h-6 bg-brand-500 rounded-full"></div>
-        <h4 className="text-lg font-black text-gray-900 dark:text-white tracking-tight">
-          Account Details
-        </h4>
+    <div className="rounded-3xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900/60 sm:p-6">
+      <div className="mb-6 flex items-center justify-between gap-3">
+        <div>
+          <div className="inline-flex items-center gap-2 rounded-full bg-brand-50 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-brand-700 dark:bg-brand-500/10 dark:text-brand-300">
+            <span className="h-1.5 w-1.5 rounded-full bg-brand-500" />
+            Personal Info
+          </div>
+          <h3 className="mt-3 text-xl font-black tracking-tight text-gray-900 dark:text-white">
+            Account Details
+          </h3>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            Your basic profile information used across the system.
+          </p>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-5">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <InfoItem label="Full Name" value={profile?.fullName || ""} icon={
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
         } />
@@ -54,7 +62,7 @@ export default function UserInfoCard() {
         <InfoItem label="Gender" value={profile?.gender || ""} icon={
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
         } />
-        <div className="lg:col-span-2">
+        <div className="md:col-span-2">
           <InfoItem label="Date of Birth" value={formatDate(profile?.dob || "")} icon={
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
           } />
