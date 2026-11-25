@@ -25,7 +25,7 @@ export default function UserProfiles() {
   return (
     <>
       <PageMeta
-        title="User Profile | Jain Trade Links"
+        title="User Profile | Paper Sheet Trade"
         description="User profile management"
       />
       <PageBreadcrumb pageTitle="My Profile" />

@@ -425,7 +425,7 @@ export default function ZeroWasteOptimizer() {
     return (
         <ReadPermissionGuard resource={Resource.REEL}>
         <div className="relative w-full max-w-none space-y-6 pb-8">
-            <PageMeta title="Zero Waste Optimizer | JAIN TRADE LINKS" description="Plan and optimize paper roll cutting to minimize waste." />
+            <PageMeta title="Zero Waste Optimizer | Paper Sheet Trade" description="Plan and optimize paper roll cutting to minimize waste." />
 
             <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-72 overflow-hidden">
                 <div className="absolute -left-20 -top-24 h-64 w-64 rounded-full bg-brand-200/30 blur-3xl dark:bg-brand-900/20" />

@@ -285,7 +285,7 @@ function SheetTable() {
         doc.setTextColor(255, 255, 255);
         doc.setFontSize(22);
         doc.setFont("helvetica", "bold");
-        doc.text("JAIN TRADE LINKS", 15, 20);
+        doc.text("PAPER SHEET TRADE", 15, 20);
         doc.setFontSize(10);
         doc.text("TAX INVOICE", 15, 30);
 

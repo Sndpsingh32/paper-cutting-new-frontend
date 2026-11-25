@@ -81,20 +81,12 @@ const Header: React.FC<HeaderProps> = ({ onClick, onToggle }) => {
           </button>
 
           <Link to="/" className="lg:hidden block group">
-            <div className="flex items-center gap-3">
-              <div className="p-1.5 bg-white rounded-xl  overflow-hidden">
-                <img
-                  src="/images/papercutting.png"
-                  alt="Logo"
-                  className="h-8 w-8 object-cover rounded-lg"
-                />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-lg font-black text-gray-900 dark:text-white leading-none tracking-tighter">
-                  JAIN TRADE <span className="text-brand-500">LINKS</span>
-                </span>
-                <span className="text-[9px] font-black uppercase text-accent-500 tracking-[0.2em] mt-0.5">Any Size. Any Time</span>
-              </div>
+            <div className="p-1.5 bg-white rounded-xl overflow-hidden">
+              <img
+                src="/images/papercutting.png"
+                alt="Logo"
+                className="h-10 w-10 object-cover rounded-lg"
+              />
             </div>
           </Link>
 
@@ -120,7 +112,7 @@ const Header: React.FC<HeaderProps> = ({ onClick, onToggle }) => {
 
           <div className="hidden lg:flex flex-col justify-center mr-auto ml-6">
             <h1 className="text-xl font-bold text-gray-900 dark:text-white tracking-tight leading-none">
-              Welcome to <span className="text-brand-500 font-black">JAIN TRADE</span> LINKS, {profile?.fullName || 'User'}! 👋
+              Welcome to <span className="text-brand-500 font-black">Paper Sheet</span> Trade, {profile?.fullName || 'User'}! 👋
             </h1>
             <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 mt-1.5 uppercase tracking-wider">
               Ready for production today

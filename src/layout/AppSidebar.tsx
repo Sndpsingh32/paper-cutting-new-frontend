@@ -306,34 +306,33 @@ const AppSidebar: React.FC = () => {
         className={`py-10 flex ${!isExpanded && !isHovered ? "lg:justify-center" : "justify-start pl-2 pr-6"}
           `}
       >
-        <Link to="/" className="block group transition-transform duration-300 hover:scale-105">
+        <Link to="/" className="block group transition-transform duration-300 hover:scale-[1.02]">
           {isExpanded || isHovered || isMobileOpen ? (
             <div className="flex items-center gap-3">
-              <div className="p-2.5 bg-white rounded-2xl  overflow-hidden">
+              <div className="shrink-0 rounded-2xl bg-white p-2 shadow-sm ring-1 ring-gray-100 dark:ring-white/10 overflow-hidden">
                 <img
                   src="/images/papercutting.png"
-                  alt="Logo"
-                  className="h-9 w-9 object-cover rounded-lg"
+                  alt="Roll Sheet Trade logo"
+                  className="h-10 w-10 object-contain rounded-lg"
                 />
               </div>
-              <div className="flex flex-col">
-                <span className="text-[16px] font-black leading-none tracking-tight">
-                  <span className="text-brand-500">JAIN</span>{" "}
-                  <span className="text-black dark:text-white">TRADE</span>{" "}
-                  <span className="text-accent-500">LINKS</span>
+              <div className="flex flex-col min-w-0">
+                <span className="text-[18px] font-black leading-none tracking-tight">
+                  <span className="text-brand-500">Roll</span>{" "}
+                  <span className="bg-gradient-to-r from-emerald-500 to-teal-400 bg-clip-text text-transparent">Sheet</span>{" "}
+                  <span className="text-accent-500">Trade</span>
                 </span>
-
-                <span className="text-[7px] font-black uppercase text-accent-500 tracking-[0.2em] mt-0 text-center">
-                  Any Size. Any Time
+                <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-gray-400 dark:text-gray-500 mt-1">
+                  Paper Cutting System
                 </span>
               </div>
             </div>
           ) : (
-            <div className="p-2.5 bg-white rounded-2xl ">
+            <div className="rounded-2xl bg-white p-2 shadow-sm ring-1 ring-gray-100 dark:ring-white/10">
               <img
                 src="/images/papercutting.png"
-                alt="Logo"
-                className="h-8 w-8 object-cover rounded-lg"
+                alt="Roll Sheet Trade logo"
+                className="h-9 w-9 object-contain rounded-lg"
               />
             </div>
           )}
