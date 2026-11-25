@@ -202,29 +202,74 @@ const GroupResultCard: React.FC<Props> = ({
     return (
         <>
             <div key={group.key} id={`group-${group.key}`} className="overflow-hidden rounded-[2rem] border border-gray-200 bg-white shadow-theme-sm dark:border-gray-800 dark:bg-gray-900">
-                <div className="border-b border-gray-100 bg-linear-to-r from-slate-950 via-slate-900 to-brand-950 px-6 py-5 dark:border-gray-800 sm:px-7">
-                    <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
-                        <div className="flex items-start gap-4">
-                            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 text-lg font-black text-white ring-1 ring-white/15">
-                                G{gIdx + 1}
-                            </div>
-                            <div>
-                                <div className="inline-flex items-center rounded-full bg-brand-500/15 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-brand-200">
-                                    Optimization Group
+                <div className="border-b border-brand-100/70 bg-gradient-to-br from-brand-50/80 via-white to-accent-50/30 dark:border-brand-500/15 dark:from-brand-500/10 dark:via-gray-900 dark:to-accent-500/5 sm:px-7 px-6 py-5">
+                    <div className="flex flex-col gap-5 xl:flex-row xl:items-stretch xl:justify-between">
+                        <div className="flex min-w-0 flex-1 items-start gap-4">
+                            <div className="relative shrink-0">
+                                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-lg font-black text-brand-700 shadow-sm ring-1 ring-brand-100 dark:bg-gray-900 dark:text-brand-300 dark:ring-brand-500/20">
+                                    {String(gIdx + 1).padStart(2, '0')}
                                 </div>
-                                <p className="mt-3 text-2xl font-black tracking-tight text-white">{groupLabel}</p>
-                                <p className="mt-1 text-sm text-slate-300">
-                                    {group.orders.length} order{group.orders.length > 1 ? 's' : ''} · {groupClients}
-                                </p>
+                                <div className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full border-2 border-white bg-emerald-500 dark:border-gray-900" title="Active group" />
+                            </div>
+
+                            <div className="min-w-0 flex-1">
+                                <div className="flex flex-wrap items-center gap-2">
+                                    <div className="inline-flex items-center gap-2 rounded-full border border-brand-200/80 bg-white/80 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-brand-700 shadow-sm dark:border-brand-500/20 dark:bg-brand-500/10 dark:text-brand-300">
+                                        <span className="h-1.5 w-1.5 rounded-full bg-brand-500" />
+                                        Optimization Group
+                                    </div>
+                                    <span className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-gray-600 dark:bg-gray-800 dark:text-gray-300">
+                                        {group.orders.length} order{group.orders.length > 1 ? 's' : ''}
+                                    </span>
+                                </div>
+
+                                <div className="mt-3 flex flex-wrap items-end gap-x-3 gap-y-1">
+                                    <h3 className="text-2xl font-black tracking-tight text-gray-900 dark:text-white sm:text-[28px]">
+                                        {groupLabel}
+                                    </h3>
+                                    <p className="pb-0.5 text-sm font-medium text-gray-500 dark:text-gray-400">
+                                        Production planning summary
+                                    </p>
+                                </div>
+
+                                <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-gray-600 dark:text-gray-300">
+                                    <span className="inline-flex items-center gap-1.5 rounded-lg bg-white/80 px-2.5 py-1.5 ring-1 ring-gray-100 dark:bg-gray-900/60 dark:ring-gray-800">
+                                        <span className="font-semibold text-gray-400 dark:text-gray-500">Clients</span>
+                                        <span className="font-bold text-gray-800 dark:text-gray-100">{groupClients}</span>
+                                    </span>
+                                    {hasOverrides && (
+                                        <span className="inline-flex items-center gap-1.5 rounded-lg bg-amber-50 px-2.5 py-1.5 text-amber-700 ring-1 ring-amber-100 dark:bg-amber-500/10 dark:text-amber-300 dark:ring-amber-500/20">
+                                            <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+                                            Manual overrides applied
+                                        </span>
+                                    )}
+                                </div>
                             </div>
                         </div>
-                        <div className="flex flex-wrap gap-2 xl:max-w-[55%] xl:justify-end">
-                            {group.orders.map((o, oi) => (
-                                <div key={o.id} className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 backdrop-blur-sm">
-                                    <p className="text-xs font-bold text-white">{o.client || `Party ${oi + 1}`}</p>
-                                    <p className="mt-0.5 text-[11px] font-medium text-slate-300">{o.reelSize}{o.reelSizeUnit} × {o.cutSize}{o.cutSizeUnit} · {Number(o.qty).toLocaleString()} sht</p>
-                                </div>
-                            ))}
+
+                        <div className="xl:w-[52%]">
+                            <div className="mb-2 flex items-center justify-between px-1">
+                                <p className="text-[11px] font-black uppercase tracking-[0.16em] text-gray-400 dark:text-gray-500">Order Requirements</p>
+                                <p className="text-[11px] font-medium text-gray-400 dark:text-gray-500">Size · Quantity</p>
+                            </div>
+                            <div className="grid gap-2 sm:grid-cols-2">
+                                {group.orders.map((o, oi) => (
+                                    <div key={o.id} className="group rounded-xl border border-gray-100 bg-white/90 px-3.5 py-3 shadow-sm transition-colors hover:border-brand-200 hover:bg-brand-50/30 dark:border-gray-800 dark:bg-gray-900/60 dark:hover:border-brand-500/30 dark:hover:bg-brand-500/5">
+                                        <div className="flex items-start justify-between gap-3">
+                                            <div className="min-w-0">
+                                                <p className="truncate text-sm font-bold text-gray-900 dark:text-white">{o.client || `Party ${oi + 1}`}</p>
+                                                <p className="mt-1 text-[11px] font-medium text-gray-500 dark:text-gray-400">
+                                                    {o.reelSize}{o.reelSizeUnit} × {o.cutSize}{o.cutSizeUnit}
+                                                </p>
+                                            </div>
+                                            <div className="shrink-0 rounded-lg bg-brand-50 px-2 py-1 text-right dark:bg-brand-500/10">
+                                                <p className="text-[10px] font-bold uppercase tracking-wide text-brand-500 dark:text-brand-400">Qty</p>
+                                                <p className="text-xs font-black text-brand-700 dark:text-brand-300">{Number(o.qty).toLocaleString()}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>

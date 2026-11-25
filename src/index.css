@@ -41,31 +41,31 @@ layer(base);
   --color-white: #ffffff;
   --color-black: #1D1D1B;
 
-  --color-brand-25: #f0faff;
-  --color-brand-50: #e0f4fc;
-  --color-brand-100: #c1e9f9;
-  --color-brand-200: #82d3f2;
-  --color-brand-300: #43bdeb;
-  --color-brand-400: #1ca7db;
-  --color-brand-500: #1FA1C9;
-  --color-brand-600: #1981a1;
-  --color-brand-700: #136179;
-  --color-brand-800: #0d4151;
-  --color-brand-900: #072129;
-  --color-brand-950: #031014;
+  --color-brand-25: #f5f7ff;
+  --color-brand-50: #eef2ff;
+  --color-brand-100: #e0e7ff;
+  --color-brand-200: #c7d2fe;
+  --color-brand-300: #a5b4fc;
+  --color-brand-400: #818cf8;
+  --color-brand-500: #6366f1;
+  --color-brand-600: #4f46e5;
+  --color-brand-700: #4338ca;
+  --color-brand-800: #3730a3;
+  --color-brand-900: #312e81;
+  --color-brand-950: #1e1b4b;
 
-  --color-accent-25: #fff5f5;
-  --color-accent-50: #feecec;
-  --color-accent-100: #fcd9da;
-  --color-accent-200: #f9b4b5;
-  --color-accent-300: #f68e91;
-  --color-accent-400: #f3696c;
-  --color-accent-500: #E22634;
-  --color-accent-600: #b51e2a;
-  --color-accent-700: #88171f;
-  --color-accent-800: #5b0f15;
-  --color-accent-900: #2e080a;
-  --color-accent-950: #170405;
+  --color-accent-25: #f0fdfa;
+  --color-accent-50: #ccfbf1;
+  --color-accent-100: #99f6e4;
+  --color-accent-200: #5eead4;
+  --color-accent-300: #2dd4bf;
+  --color-accent-400: #14b8a6;
+  --color-accent-500: #0d9488;
+  --color-accent-600: #0f766e;
+  --color-accent-700: #115e59;
+  --color-accent-800: #134e4a;
+  --color-accent-900: #042f2e;
+  --color-accent-950: #021716;
 
   --color-blue-light-25: #f5fbff;
   --color-blue-light-50: #f0f9ff;
@@ -209,15 +209,15 @@ layer(base);
 }
 
 @utility menu-item {
-  @apply relative flex items-center w-full gap-3 px-3 py-2 font-medium rounded-lg text-theme-sm;
+  @apply relative flex items-center w-full gap-3 px-3.5 py-2.5 font-medium rounded-xl text-theme-sm transition-all duration-200;
 }
 
 @utility menu-item-active {
-  @apply bg-brand-50/80 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400;
+  @apply bg-gradient-to-r from-brand-50 to-brand-100/60 text-brand-700 shadow-sm ring-1 ring-brand-100 dark:from-brand-500/15 dark:to-accent-500/10 dark:text-brand-300 dark:ring-brand-500/20;
 }
 
 @utility menu-item-inactive {
-  @apply text-gray-700 hover:bg-gray-100 group-hover:text-gray-900 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-white;
+  @apply text-gray-600 hover:bg-gray-50 hover:text-gray-900 hover:translate-x-0.5 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-white;
 }
 
 @utility menu-item-icon {
@@ -230,12 +230,12 @@ layer(base);
 
 @utility menu-item-icon-size {
   & svg {
-    @apply !size-6;
+    @apply !size-[22px];
   }
 }
 
 @utility menu-item-icon-inactive {
-  @apply text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-300;
+  @apply text-gray-400 group-hover:text-brand-500 dark:text-gray-500 dark:group-hover:text-brand-300;
 }
 
 @utility menu-item-arrow {
@@ -251,15 +251,15 @@ layer(base);
 }
 
 @utility menu-dropdown-item {
-  @apply relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-theme-sm font-medium;
+  @apply relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-theme-sm font-medium transition-colors duration-150;
 }
 
 @utility menu-dropdown-item-active {
-  @apply bg-brand-50/80 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400;
+  @apply bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400;
 }
 
 @utility menu-dropdown-item-inactive {
-  @apply text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white;
+  @apply text-gray-500 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-white;
 }
 
 @utility menu-dropdown-badge {

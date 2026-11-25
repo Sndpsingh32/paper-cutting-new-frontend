@@ -26,7 +26,7 @@ const AppSidebar: React.FC = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered, toggleMobileSidebar } = useSidebar();
   const location = useLocation();
   const navigate = useNavigate();
-  const { profile, loading, clearProfile } = useProfile();
+  const { profile, clearProfile } = useProfile();
 
   const handleLogout = () => {
     localStorage.removeItem("peparToken");
@@ -158,12 +158,6 @@ const AppSidebar: React.FC = () => {
     });
   };
 
-  const [imgError, setImgError] = useState(false);
-
-  useEffect(() => {
-    setImgError(false); // Reset error when profile changes
-  }, [profile]);
-
   const renderMenuItems = (items: NavItem[]) => (
     <ul className="flex flex-col gap-4">
       {items.map((nav, index) => (
@@ -290,7 +284,7 @@ const AppSidebar: React.FC = () => {
 
   return (
     <aside
-      className={`fixed flex flex-col top-0 px-5 left-0 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 
+      className={`fixed flex flex-col top-0 px-5 left-0 bg-gradient-to-b from-brand-50/60 via-white to-white dark:from-gray-900 dark:via-gray-900 dark:to-gray-950 backdrop-blur-xl border-r border-brand-100 dark:border-brand-500/15 text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 shadow-[4px_0_28px_-10px_rgba(99,102,241,0.2)]
         ${isExpanded || isMobileOpen
           ? "w-[290px]"
           : isHovered
@@ -303,32 +297,36 @@ const AppSidebar: React.FC = () => {
       onMouseLeave={() => setIsHovered(false)}
     >
       <div
-        className={`py-10 flex ${!isExpanded && !isHovered ? "lg:justify-center" : "justify-start pl-2 pr-6"}
+        className={`py-8 flex ${!isExpanded && !isHovered ? "lg:justify-center" : "justify-start px-1"}
           `}
       >
-        <Link to="/" className="block group transition-transform duration-300 hover:scale-[1.02]">
+        <Link to="/" className="block group w-full">
           {isExpanded || isHovered || isMobileOpen ? (
-            <div className="flex items-center gap-3">
-              <div className="shrink-0 rounded-2xl bg-white p-2 shadow-sm ring-1 ring-gray-100 dark:ring-white/10 overflow-hidden">
-                <img
-                  src="/images/papercutting.png"
-                  alt="Roll Sheet Trade logo"
-                  className="h-10 w-10 object-contain rounded-lg"
-                />
-              </div>
-              <div className="flex flex-col min-w-0">
-                <span className="text-[18px] font-black leading-none tracking-tight">
-                  <span className="text-brand-500">Roll</span>{" "}
-                  <span className="bg-gradient-to-r from-emerald-500 to-teal-400 bg-clip-text text-transparent">Sheet</span>{" "}
-                  <span className="text-accent-500">Trade</span>
-                </span>
-                <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-gray-400 dark:text-gray-500 mt-1">
-                  Paper Cutting System
-                </span>
+            <div className="relative overflow-hidden rounded-2xl border border-brand-100/80 bg-gradient-to-br from-brand-50 via-white to-accent-50/60 p-3.5 shadow-sm dark:border-brand-500/20 dark:from-brand-500/10 dark:via-gray-900 dark:to-accent-500/10">
+              <div className="absolute -top-8 -right-8 h-20 w-20 rounded-full bg-brand-400/15 blur-2xl" />
+              <div className="absolute -bottom-6 -left-6 h-16 w-16 rounded-full bg-accent-400/15 blur-2xl" />
+              <div className="relative flex items-center gap-3">
+                <div className="shrink-0 rounded-xl bg-white p-1.5 shadow-sm ring-1 ring-brand-100 dark:bg-gray-900 dark:ring-white/10">
+                  <img
+                    src="/images/papercutting.png"
+                    alt="Roll Sheet Trade logo"
+                    className="h-11 w-11 object-contain rounded-lg"
+                  />
+                </div>
+                <div className="flex flex-col min-w-0">
+                  <span className="text-[19px] font-black leading-none tracking-tight">
+                    <span className="text-brand-600 dark:text-brand-400">Roll</span>{" "}
+                    <span className="bg-gradient-to-r from-emerald-500 to-teal-400 bg-clip-text text-transparent">Sheet</span>{" "}
+                    <span className="text-accent-600 dark:text-accent-400">Trade</span>
+                  </span>
+                  <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400 mt-1.5">
+                    CRM & Paper System
+                  </span>
+                </div>
               </div>
             </div>
           ) : (
-            <div className="rounded-2xl bg-white p-2 shadow-sm ring-1 ring-gray-100 dark:ring-white/10">
+            <div className="rounded-2xl border border-brand-100/80 bg-gradient-to-br from-brand-50 to-accent-50/50 p-2 shadow-sm dark:border-brand-500/20 dark:from-brand-500/10 dark:to-accent-500/10">
               <img
                 src="/images/papercutting.png"
                 alt="Roll Sheet Trade logo"
@@ -338,55 +336,6 @@ const AppSidebar: React.FC = () => {
           )}
         </Link>
       </div>
-      {/* Profile Section */}
-      {(isExpanded || isHovered || isMobileOpen) && (
-        <div className="pl-1 pr-4 mb-6 shrink-0">
-          <div className="relative overflow-hidden rounded-[2rem] border border-gray-100 bg-white p-4 shadow-xl shadow-gray-200/20 dark:border-white/5 dark:bg-white/[0.03] dark:shadow-none group transition-all duration-300 hover:translate-y-[-4px]">
-            {/* Background Glow */}
-            <div className="absolute -top-10 -right-10 w-24 h-24 bg-brand-500/10 rounded-full blur-2xl group-hover:bg-brand-500/20 transition-colors duration-500"></div>
-
-            {loading ? (
-              <div className="flex items-center space-x-3">
-                <div className="min-w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded-2xl animate-pulse"></div>
-                <div className="flex-1 space-y-2">
-                  <div className="h-4 bg-gray-100 dark:bg-gray-800 rounded animate-pulse w-full"></div>
-                  <div className="h-3 bg-gray-100 dark:bg-gray-800 rounded animate-pulse w-2/3"></div>
-                </div>
-              </div>
-            ) : profile ? (
-              <div className="flex items-center space-x-3 relative z-1">
-                <div className="relative">
-                  <div className="min-w-12 h-12 overflow-hidden bg-gradient-to-br from-brand-400 to-brand-600 rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-lg ring-4 ring-white dark:ring-gray-900 group-hover:scale-105 transition-transform duration-300">
-                    {profile.avatar && !imgError ? (
-                      <img
-                        src={profile.avatar}
-                        alt="avatar"
-                        className="object-cover w-full h-full"
-                        onError={() => setImgError(true)}
-                      />
-                    ) : (
-                      profile.fullName?.charAt(0).toUpperCase() || 'U'
-                    )}
-                  </div>
-                  <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-white dark:border-gray-900 rounded-full shadow-sm"></div>
-                </div>
-                <div className="flex-1">
-                  <p className="text-[14px] font-black text-gray-900 dark:text-white whitespace-nowrap tracking-tight leading-tight">
-                    {profile.fullName || 'User'}
-                  </p>
-                  <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mt-1">
-                    {profile.role || 'Officer'}
-                  </p>
-                </div>
-              </div>
-            ) : (
-              <div className="text-center text-sm text-gray-500 dark:text-gray-400 font-bold py-2">
-                Profile not available
-              </div>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* Scrollable Menu Items */}
       <div className="flex-1 overflow-y-auto duration-300 ease-linear no-scrollbar">
@@ -394,13 +343,16 @@ const AppSidebar: React.FC = () => {
           <div className="flex flex-col gap-4">
             <div>
               <h2
-                className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded && !isHovered
+                className={`mb-3 px-1 text-[11px] font-bold uppercase tracking-[0.16em] flex leading-[20px] text-gray-400 dark:text-gray-500 ${!isExpanded && !isHovered
                   ? "lg:justify-center"
                   : "justify-start"
                   }`}
               >
                 {isExpanded || isHovered || isMobileOpen ? (
-                  "Menu"
+                  <span className="flex items-center gap-2">
+                    <span className="h-px w-4 bg-brand-300 dark:bg-brand-500/50" />
+                    Main Menu
+                  </span>
                 ) : (
                   <HorizontaLDots className="size-6" />
                 )}
@@ -413,17 +365,17 @@ const AppSidebar: React.FC = () => {
       </div>
 
       {/* Fixed Sign Out Button at Bottom */}
-      <div className="mt-auto pb-4 pt-2 shrink-0 bg-white dark:bg-gray-900 z-10">
+      <div className="mt-auto pb-4 pt-3 shrink-0 border-t border-gray-100 dark:border-gray-800/80 bg-transparent z-10">
         <ul className="flex flex-col gap-4">
           <li>
             <button
               onClick={handleLogout}
-              className={`menu-item group menu-item-inactive cursor-pointer w-full ${!isExpanded && !isHovered
+              className={`group relative flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-theme-sm font-medium text-red-500 transition-all duration-200 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/10 ${!isExpanded && !isHovered
                 ? "lg:justify-center"
                 : "lg:justify-start"
                 }`}
             >
-              <span className="menu-item-icon-size menu-item-icon-inactive text-red-500 group-hover:text-red-600">
+              <span className="menu-item-icon-size text-red-500 group-hover:text-red-600">
                 <svg
                   width="24"
                   height="24"
@@ -440,7 +392,7 @@ const AppSidebar: React.FC = () => {
                 </svg>
               </span>
               {(isExpanded || isHovered || isMobileOpen) && (
-                <span className="menu-item-text text-red-500 group-hover:text-red-600">Sign out</span>
+                <span className="menu-item-text">Sign out</span>
               )}
             </button>
           </li>

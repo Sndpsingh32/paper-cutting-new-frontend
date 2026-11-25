@@ -43,11 +43,11 @@ const AppHeader: React.FC = () => {
   }, []);
 
   return (
-    <header className="sticky top-0 flex w-full bg-white/80 backdrop-blur-md border-b border-gray-100 z-30 dark:border-white/5 dark:bg-gray-900/80">
+    <header className="sticky top-0 z-30 flex w-full border-b border-brand-100 bg-white/95 shadow-[0_2px_14px_-6px_rgba(99,102,241,0.25)] backdrop-blur-md dark:border-brand-500/15 dark:bg-gray-900/95">
       <div className="flex flex-col items-center justify-between grow lg:flex-row lg:px-6">
-        <div className="flex items-center justify-between w-full gap-2 px-4 py-4 border-b border-gray-100 dark:border-white/5 sm:gap-4 lg:justify-normal lg:border-b-0 lg:px-0 lg:py-5">
+        <div className="flex items-center justify-between w-full gap-2 px-4 py-4 border-b border-brand-100/70 bg-gradient-to-r from-brand-50/40 via-white to-white dark:border-brand-500/10 dark:from-brand-500/5 dark:via-gray-900 dark:to-gray-900 sm:gap-4 lg:justify-normal lg:border-b-0 lg:bg-none lg:px-0 lg:py-5">
           <button
-            className="items-center justify-center w-10 h-10 text-gray-500 border-gray-200 rounded-lg z-30 dark:border-gray-800 lg:flex dark:text-gray-400 lg:h-11 lg:w-11 lg:border"
+            className="items-center justify-center w-10 h-10 text-brand-600 border border-brand-100 bg-brand-50/70 rounded-xl z-30 hover:bg-brand-100 dark:border-brand-500/20 dark:bg-brand-500/10 dark:text-brand-300 lg:flex lg:h-11 lg:w-11"
             onClick={handleToggle}
             aria-label="Toggle Sidebar"
           >
@@ -86,18 +86,18 @@ const AppHeader: React.FC = () => {
           </button>
 
           <Link to="/" className="lg:hidden block group">
-            <div className="p-1.5 bg-white rounded-xl overflow-hidden">
+            <div className="p-1.5 bg-white rounded-xl overflow-hidden ring-1 ring-brand-100 dark:ring-brand-500/20">
               <img
                 src="/images/papercutting.png"
-                alt="Logo"
-                className="h-10 w-10 object-cover rounded-lg"
+                alt="Roll Sheet Trade logo"
+                className="h-10 w-10 object-contain rounded-lg"
               />
             </div>
           </Link>
 
           <button
             onClick={toggleApplicationMenu}
-            className="flex items-center justify-center w-10 h-10 text-gray-700 rounded-lg z-30 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 lg:hidden"
+            className="flex items-center justify-center w-10 h-10 text-brand-600 rounded-xl z-30 bg-brand-50/70 border border-brand-100 hover:bg-brand-100 dark:text-brand-300 dark:bg-brand-500/10 dark:border-brand-500/20 dark:hover:bg-brand-500/20 lg:hidden"
           >
             <svg
               width="24"
@@ -116,17 +116,23 @@ const AppHeader: React.FC = () => {
           </button>
 
           <div className="hidden lg:flex flex-col justify-center mr-auto ml-6">
+            <div className="inline-flex items-center gap-2 mb-1">
+              <span className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_0_3px_rgba(16,185,129,0.15)]" />
+              <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-brand-600 dark:text-brand-300">
+                Roll Sheet Trade CRM
+              </p>
+            </div>
             <h1 className="text-xl font-bold text-gray-900 dark:text-white tracking-tight leading-none">
-              Welcome to <span className="text-brand-500 font-black">Paper Sheet</span> Trade, {profile?.fullName || 'User'}! 👋
+              Welcome, <span className="bg-gradient-to-r from-brand-600 to-accent-500 bg-clip-text text-transparent font-black">{profile?.fullName || 'User'}</span>
             </h1>
-            <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 mt-1.5 uppercase tracking-wider">
-              Ready for production today
+            <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 mt-1.5">
+              Manage production, sales, and inventory from one place
             </p>
           </div>
         </div>
         <div
           className={`${isApplicationMenuOpen ? "flex" : "hidden"
-            } items-center justify-between w-full gap-4 px-5 py-4 lg:flex bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-white/5 lg:bg-transparent lg:dark:bg-transparent lg:border-t-0 lg:justify-end lg:px-0 lg:shadow-none transition-all duration-300`}
+            } items-center justify-between w-full gap-4 px-5 py-4 lg:flex bg-brand-50/30 dark:bg-gray-900 border-t border-brand-100/70 dark:border-brand-500/10 lg:bg-transparent lg:dark:bg-transparent lg:border-t-0 lg:justify-end lg:px-0 lg:shadow-none transition-all duration-300`}
         >
           <div className="flex items-center gap-4">
             {/* <!-- Notification Menu Area --> */}

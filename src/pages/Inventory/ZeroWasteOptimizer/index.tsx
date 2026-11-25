@@ -433,49 +433,49 @@ export default function ZeroWasteOptimizer() {
                 <div className="absolute left-1/3 top-24 h-40 w-40 rounded-full bg-emerald-200/30 blur-3xl dark:bg-emerald-900/10" />
             </div>
 
-            <div className="overflow-hidden rounded-[2rem] border border-gray-200/80 bg-white/90 shadow-theme-sm backdrop-blur-sm dark:border-gray-800 dark:bg-gray-900/90">
-                <div className="border-b border-gray-100 bg-linear-to-r from-gray-950 via-gray-900 to-brand-950 px-6 py-7 dark:border-gray-800 sm:px-8">
+            <div className="overflow-hidden rounded-[2rem] border border-brand-100 bg-white/95 shadow-theme-sm backdrop-blur-sm dark:border-brand-500/15 dark:bg-gray-900/90">
+                <div className="border-b border-brand-100/70 bg-gradient-to-r from-brand-50 via-white to-accent-50/40 px-6 py-7 dark:border-brand-500/15 dark:from-brand-500/10 dark:via-gray-900 dark:to-accent-500/10 sm:px-8">
                     <div className="flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
                         <div className="max-w-3xl">
                             <button
                                 onClick={() => navigate(-1)}
-                                className="mb-5 inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-bold uppercase tracking-[0.18em] text-gray-300 transition hover:bg-white/10 hover:text-white"
+                                className="mb-5 inline-flex items-center gap-2 rounded-xl border border-brand-200 bg-white px-3 py-2 text-xs font-bold uppercase tracking-[0.18em] text-brand-700 transition hover:bg-brand-50 dark:border-brand-500/20 dark:bg-gray-900 dark:text-brand-300 dark:hover:bg-brand-500/10"
                             >
                                 <AngleLeftIcon className="h-4 w-4" />
                                 Back
                             </button>
-                            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-brand-400/30 bg-brand-500/10 px-3 py-1 text-[11px] font-black uppercase tracking-[0.22em] text-brand-200">
-                                <span className="h-2 w-2 rounded-full bg-brand-400" />
+                            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-brand-200 bg-brand-100/70 px-3 py-1 text-[11px] font-black uppercase tracking-[0.22em] text-brand-700 dark:border-brand-500/20 dark:bg-brand-500/10 dark:text-brand-300">
+                                <span className="h-2 w-2 rounded-full bg-brand-500" />
                                 Inventory Intelligence
                             </div>
-                            <h1 className="text-3xl font-black tracking-tight text-white sm:text-4xl">
-                                Zero Waste Optimizer
+                            <h1 className="text-3xl font-black tracking-tight text-gray-900 dark:text-white sm:text-4xl">
+                                Zero Waste <span className="bg-gradient-to-r from-brand-600 to-accent-500 bg-clip-text text-transparent">Optimizer</span>
                             </h1>
-                            <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-300 sm:text-base">
+                            <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-600 dark:text-gray-300 sm:text-base">
                                 Plan roll cutting with a clear, production-ready view. Compare roll options, control strip output, and share customer-ready summaries from one workspace.
                             </p>
                         </div>
 
                         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 xl:w-[520px]">
-                            <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-sm">
-                                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-gray-400">Orders</p>
-                                <p className="mt-2 text-2xl font-black text-white">{validOrderCount}</p>
-                                <p className="text-xs font-medium text-gray-400">Ready to optimize</p>
+                            <div className="rounded-2xl border border-brand-100 bg-white/80 px-4 py-3 shadow-sm dark:border-brand-500/15 dark:bg-gray-900/60">
+                                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">Orders</p>
+                                <p className="mt-2 text-2xl font-black text-gray-900 dark:text-white">{validOrderCount}</p>
+                                <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Ready to optimize</p>
                             </div>
-                            <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-sm">
-                                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-gray-400">Sheets</p>
-                                <p className="mt-2 text-2xl font-black text-white">{totalOrderedSheets.toLocaleString()}</p>
-                                <p className="text-xs font-medium text-gray-400">Total requirement</p>
+                            <div className="rounded-2xl border border-brand-100 bg-white/80 px-4 py-3 shadow-sm dark:border-brand-500/15 dark:bg-gray-900/60">
+                                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">Sheets</p>
+                                <p className="mt-2 text-2xl font-black text-gray-900 dark:text-white">{totalOrderedSheets.toLocaleString()}</p>
+                                <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Total requirement</p>
                             </div>
-                            <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-sm">
-                                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-gray-400">Groups</p>
-                                <p className="mt-2 text-2xl font-black text-white">{matchedGroups}</p>
-                                <p className="text-xs font-medium text-gray-400">Matched layouts</p>
+                            <div className="rounded-2xl border border-brand-100 bg-white/80 px-4 py-3 shadow-sm dark:border-brand-500/15 dark:bg-gray-900/60">
+                                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">Groups</p>
+                                <p className="mt-2 text-2xl font-black text-gray-900 dark:text-white">{matchedGroups}</p>
+                                <p className="text-xs font-medium text-gray-500 dark:text-gray-400">Matched layouts</p>
                             </div>
-                            <div className="rounded-2xl border border-emerald-400/20 bg-emerald-500/10 px-4 py-3 backdrop-blur-sm">
-                                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-emerald-200">Selected</p>
-                                <p className="mt-2 text-2xl font-black text-white">{selectedRollCount}</p>
-                                <p className="text-xs font-medium text-emerald-100/80">Roll plans</p>
+                            <div className="rounded-2xl border border-emerald-200 bg-emerald-50/80 px-4 py-3 shadow-sm dark:border-emerald-500/20 dark:bg-emerald-500/10">
+                                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-emerald-700 dark:text-emerald-300">Selected</p>
+                                <p className="mt-2 text-2xl font-black text-emerald-700 dark:text-emerald-300">{selectedRollCount}</p>
+                                <p className="text-xs font-medium text-emerald-600/80 dark:text-emerald-300/80">Roll plans</p>
                             </div>
                         </div>
                     </div>
@@ -545,17 +545,17 @@ export default function ZeroWasteOptimizer() {
 
             {hasFetched && groupResults.length > 0 && (
                 <div className="space-y-6">
-                    <div className="flex flex-col gap-3 rounded-[1.75rem] border border-gray-200 bg-white px-6 py-5 shadow-theme-xs dark:border-gray-800 dark:bg-gray-900 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex flex-col gap-3 rounded-[1.75rem] border border-brand-100 bg-gradient-to-r from-brand-50/70 via-white to-accent-50/40 px-6 py-5 shadow-theme-xs dark:border-brand-500/15 dark:from-brand-500/10 dark:via-gray-900 dark:to-accent-500/10 sm:flex-row sm:items-center sm:justify-between">
                         <div>
-                            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-black uppercase tracking-[0.18em] text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300">
+                            <div className="inline-flex items-center gap-2 rounded-full bg-brand-100/80 px-3 py-1 text-[11px] font-black uppercase tracking-[0.18em] text-brand-700 dark:bg-brand-500/10 dark:text-brand-300">
                                 <ChevronRight className="h-3.5 w-3.5" />
                                 Optimization Results
                             </div>
                             <h2 className="mt-3 text-xl font-black text-gray-900 dark:text-white">Production-ready roll plans</h2>
-                            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Review each group, adjust strip behavior, and share the final plan with confidence.</p>
+                            <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">Review each group, adjust strip behavior, and share the final plan with confidence.</p>
                         </div>
-                        <div className="rounded-2xl bg-gray-50 px-4 py-3 text-sm dark:bg-gray-800/70">
-                            <span className="font-black text-gray-900 dark:text-white">{groupResults.length}</span>
+                        <div className="rounded-2xl border border-brand-100 bg-white/80 px-4 py-3 text-sm shadow-sm dark:border-brand-500/15 dark:bg-gray-900/60">
+                            <span className="font-black text-brand-700 dark:text-brand-300">{groupResults.length}</span>
                             <span className="ml-1 text-gray-500 dark:text-gray-400">result group{groupResults.length > 1 ? "s" : ""}</span>
                         </div>
                     </div>
